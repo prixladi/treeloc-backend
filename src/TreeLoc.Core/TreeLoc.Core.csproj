@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Filters\" />
+    <ProjectReference Include="..\TreeLoc.Database\TreeLoc.Database.csproj" />
   </ItemGroup>
 
 </Project>

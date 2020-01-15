@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using TreeLoc.Api.Configs;
-using TreeLoc.Api.Filters;
+using TreeLoc.Api.IoC;
 
 namespace Treeloc
 {
@@ -12,8 +12,13 @@ namespace Treeloc
       services.AddCors();
       services.AddExceptionHandling();
 
-      services.AddControllers(options => options.Filters.Add<ApiValidationAttribute>())
+      services.AddControllers(ControllersConfig.Configure)
         .AddJsonOptions(JsonConfig.Setup);
+
+      services.AddDbContext<DbConfig>();
+
+      services.AddRepositories();
+      services.AddHostedServices();
 
       services.AddSwaggerGen(SwaggerConfig.SetupSwaggerGen);
     }

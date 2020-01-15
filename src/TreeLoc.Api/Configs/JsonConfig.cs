@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TreeLoc.Api.Configs
 {
-  public static class JsonConfig
+  internal static class JsonConfig
   {
     public static void Setup(JsonOptions jsonOptions)
     {

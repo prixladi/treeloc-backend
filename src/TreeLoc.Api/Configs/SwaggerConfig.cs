@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace TreeLoc.Api.Configs
 {
-  public class SwaggerConfig
+  internal static class SwaggerConfig
   {
     public const string _SwaggerSecurityDefinitionName = "BasicAuthentication";
 
