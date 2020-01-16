@@ -8,40 +8,42 @@ namespace TreeLoc.Api.Extensions
 {
   public static class WoodyPlantsExtensions
   {
-    public static WoodyPlantDetailModel ToDetail(this WoodyPlantDocument woodyPlantDocument)
+    public static WoodyPlantDetailModel ToDetail(this WoodyPlantDocument doc)
     {
-      if (woodyPlantDocument is null)
-        throw new ArgumentNullException(nameof(woodyPlantDocument));
+      if (doc is null)
+        throw new ArgumentNullException(nameof(doc));
 
       return new WoodyPlantDetailModel
       {
-        Id = woodyPlantDocument.Id,
-        Name = woodyPlantDocument.Name,
-        ImageUrl = woodyPlantDocument.ImageUrl,
-        Note = woodyPlantDocument.Note
+        Id = doc.Id,
+        Name = doc.Name,
+        ImageUrl = doc.ImageUrl,
+        Note = doc.Note,
+        Location = doc.Location
       };
     }
 
-    public static WoodyPlantPreviewModel ToPreview(this WoodyPlantDocument woodyPlantDocument)
+    public static WoodyPlantPreviewModel ToPreview(this WoodyPlantDocument doc)
     {
-      if (woodyPlantDocument is null)
-        throw new ArgumentNullException(nameof(woodyPlantDocument));
+      if (doc is null)
+        throw new ArgumentNullException(nameof(doc));
 
       return new WoodyPlantPreviewModel
       {
-        Id = woodyPlantDocument.Id,
-        Name = woodyPlantDocument.Name,
-        ImageUrl = woodyPlantDocument.ImageUrl,
-        Note = woodyPlantDocument.Note
+        Id = doc.Id,
+        Name = doc.Name,
+        ImageUrl = doc.ImageUrl,
+        Note = doc.Note,
+        Location = doc.Location
       };
     }
 
-    public static List<WoodyPlantPreviewModel> ToPreview(this List<WoodyPlantDocument> woodyPlantDocuments)
+    public static List<WoodyPlantPreviewModel> ToPreview(this List<WoodyPlantDocument> docs)
     {
-      if (woodyPlantDocuments is null)
-        throw new ArgumentNullException(nameof(woodyPlantDocuments));
+      if (docs is null)
+        throw new ArgumentNullException(nameof(docs));
 
-      return woodyPlantDocuments
+      return docs
         .Select(ToPreview)
         .ToList();
     }

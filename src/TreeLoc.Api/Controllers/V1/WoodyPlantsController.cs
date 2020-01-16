@@ -35,7 +35,7 @@ namespace TreeLoc.Api.Controllers.V1
     }
 
     /// <summary>
-    /// Returns detail about Woody plant
+    /// Returns detail about woody plant
     /// </summary>
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>

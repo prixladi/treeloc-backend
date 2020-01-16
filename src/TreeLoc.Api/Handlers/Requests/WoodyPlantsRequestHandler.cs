@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using TreeLoc.Api.Extensions;
@@ -33,11 +34,18 @@ namespace TreeLoc.Api.Handlers.Requests
     {
       var plants = await fWoodyPlantsRepository.GetByFilterAsync(request.Filter, cancellationToken);
 
-      return new WoodyPlantListModel
+      try
       {
-        TotalCount = await fWoodyPlantsRepository.CountAsync(request.Filter, cancellationToken),
-        WoodyPlants = plants.ToPreview()
-      };
+        return new WoodyPlantListModel
+        {
+          TotalCount = await fWoodyPlantsRepository.CountByFilterAsync(request.Filter, cancellationToken),
+          WoodyPlants = plants.ToPreview()
+        };
+      }
+      catch(Exception ex)
+      {
+        throw ex;
+      }
     }
   }
 }

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
-using MongoDB.Driver.Linq;
+using TreeLoc.Api.Extensions;
 using TreeLoc.Api.Models;
 using TreeLoc.Database;
 using TreeLoc.Database.Documents;
@@ -15,18 +16,28 @@ namespace TreeLoc.Api.Repositories
     public WoodyPlantsRepository(DbContext dbContext)
       : base(dbContext) { }
 
-    public Task<int> CountAsync(WoodyPlantFilterModel woodyPlantFilterModel, CancellationToken cancellationToken)
+    public Task<long> CountByFilterAsync(WoodyPlantFilterModel filter, CancellationToken cancellationToken)
     {
-      return Query
-        .FilterNoPage(woodyPlantFilterModel)
-        .CountAsync(cancellationToken);
+      return Collection.CountAsync(filter.ToFilterDefinition(), cancellationToken: cancellationToken);
     }
 
-    public Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel woodyPlantFilterModel, CancellationToken cancellationToken)
+    public async Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel filter, CancellationToken cancellationToken)
     {
-      return Query
-        .Filter(woodyPlantFilterModel)
-        .ToListAsync(cancellationToken);
+      if (filter is null)
+        throw new ArgumentNullException(nameof(filter));
+
+      var cursor = await Collection.FindAsync(filter.ToFilterDefinition(), new FindOptions<WoodyPlantDocument, WoodyPlantDocument>
+      {
+        Skip = filter.Skip,
+        Limit = filter.Take
+      });
+
+      var plants = new List<WoodyPlantDocument>();
+
+      while (await cursor.MoveNextAsync(cancellationToken))
+        plants.AddRange(cursor.Current);
+
+      return plants;
     }
   }
 }
