@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using TreeLoc.Api.Configs;
 using TreeLoc.Api.IoC;
@@ -16,6 +17,8 @@ namespace Treeloc
         .AddJsonOptions(JsonConfig.Setup);
 
       services.AddDbContext<DbConfig>();
+
+      services.AddMediatR(typeof(Startup));
 
       services.AddRepositories();
       services.AddHostedServices();

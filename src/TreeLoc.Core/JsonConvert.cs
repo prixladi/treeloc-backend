@@ -18,7 +18,7 @@ namespace TreeLoc
 
       using (var owner = MemoryPool<byte>.Shared.Rent(jsonLength))
       {
-        var memory = owner.Memory;
+        var memory = owner.Memory.Slice(0, jsonLength);
         stream.Seek(0, SeekOrigin.Begin);
         await stream.ReadAsync(memory, cancellationToken);
         return Encoding.UTF8.GetString(memory.Span);

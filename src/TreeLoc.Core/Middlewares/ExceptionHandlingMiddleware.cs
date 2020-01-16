@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using TreeLoc.Facades;
@@ -29,8 +30,9 @@ namespace TreeLoc.Middlewares
       {
         fExceptionHandlingFacade.Handle(ex, out var message, out int statusCode);
 
-        var response  = await JsonConvert.SerializeAsync(new MessageModel { Message = message }, context.RequestAborted);
+        var response = await JsonConvert.SerializeAsync(new ResposeMessageModel { Message = message }, context.RequestAborted);
 
+        context.Response.ContentType = MediaTypeNames.Application.Json;
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsync(response, context.RequestAborted);
       }

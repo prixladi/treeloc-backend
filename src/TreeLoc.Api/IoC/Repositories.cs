@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TreeLoc.Repositories;
+using TreeLoc.Api.Repositories;
 
 namespace TreeLoc.Api.IoC
 {

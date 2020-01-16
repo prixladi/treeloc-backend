@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using TreeLoc.Api.Converters;
 
 namespace TreeLoc.Api.Configs
 {
@@ -8,6 +9,7 @@ namespace TreeLoc.Api.Configs
     public static void Setup(JsonOptions jsonOptions)
     {
       jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+      jsonOptions.JsonSerializerOptions.Converters.Add(new ObjectIdJsonConverter());
     }
   }
 }

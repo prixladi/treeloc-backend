@@ -10,7 +10,7 @@ namespace TreeLoc.Api.Controllers
   public class InfoController: Controller
   {
     /// <summary>
-    /// Gets basic info about api
+    /// Returns basic info about api
     /// </summary>
     /// <returns>Model with info</returns>
     [HttpGet]

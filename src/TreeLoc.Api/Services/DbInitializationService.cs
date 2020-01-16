@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using MongoDB.Driver;
 using TreeLoc.Database;
 using TreeLoc.Database.Documents;
+using TreeLoc.Database.Documents.Locations;
 
 namespace TreeLoc.Api.Services
 {
@@ -19,7 +20,9 @@ namespace TreeLoc.Api.Services
 
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-      var indexManager = fDbContext.Database.GetCollection<WoodyPlantDocument>().Indexes;
+      var collection = fDbContext.Database.GetCollection<WoodyPlantDocument>();
+
+      var indexManager = collection.Indexes;
       await indexManager.CreateManyAsync(GetWoodyPlantsIndexes());
     }
 
