@@ -1,5 +1,4 @@
-﻿using System;
-using TreeLoc.Database;
+﻿using TreeLoc.Database;
 
 namespace TreeLoc.Api.Configs
 {

@@ -40,20 +40,21 @@ namespace TreeLoc.Api.Extensions
       switch (model.SortBy)
       {
         case nameof(WoodyPlantDocument.LocalizedNames):
-          sort = model.Ascending ? Builders<WoodyPlantDocument>.Sort.Ascending(x => x.LocalizedNames) : Builders<WoodyPlantDocument>.Sort.Descending(x => x.LocalizedNames);
+          sort = model.Ascending ? Builders<WoodyPlantDocument>.Sort.Ascending(x => x.LocalizedNames.Czech) : Builders<WoodyPlantDocument>.Sort.Descending(x => x.LocalizedNames.Czech);
           break;
         case nameof(WoodyPlantDocument.LocalizedNotes):
-          sort = model.Ascending ? Builders<WoodyPlantDocument>.Sort.Ascending(x => x.LocalizedNotes) : Builders<WoodyPlantDocument>.Sort.Descending(x => x.LocalizedNotes);
+          sort = model.Ascending ? Builders<WoodyPlantDocument>.Sort.Ascending(x => x.LocalizedNotes.Czech) : Builders<WoodyPlantDocument>.Sort.Descending(x => x.LocalizedNotes.Czech);
           break;
         case nameof(WoodyPlantDocument.LocalizedSpecies):
-          sort = model.Ascending ? Builders<WoodyPlantDocument>.Sort.Ascending(x => x.LocalizedSpecies) : Builders<WoodyPlantDocument>.Sort.Descending(x => x.LocalizedSpecies);
+          sort = model.Ascending ? Builders<WoodyPlantDocument>.Sort.Ascending(x => x.LocalizedSpecies.Czech) : Builders<WoodyPlantDocument>.Sort.Descending(x => x.LocalizedSpecies.Czech);
           break;
         case nameof(WoodyPlantDocument.TextMatchScore):
-          sort = Builders<WoodyPlantDocument>.Sort.MetaTextScore(nameof(WoodyPlantDocument.TextMatchScore));
+          if (textSearch)
+            sort = Builders<WoodyPlantDocument>.Sort.MetaTextScore(nameof(WoodyPlantDocument.TextMatchScore));
           break;
       }
 
-      var options = new FindOptions<WoodyPlantDocument> { Skip = skip, Limit = take };
+      var options = new FindOptions<WoodyPlantDocument> { Skip = skip, Limit = take, Collation = new Collation("cs") };
 
       if (textSearch && model.SortBy == nameof(WoodyPlantDocument.TextMatchScore))
         options.Projection = Builders<WoodyPlantDocument>.Projection.MetaTextScore(nameof(WoodyPlantDocument.TextMatchScore));
