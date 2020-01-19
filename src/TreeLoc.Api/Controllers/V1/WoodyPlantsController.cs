@@ -24,14 +24,15 @@ namespace TreeLoc.Api.Controllers.V1
     /// Returns detail about Woody plant
     /// </summary>
     /// <param name="filter"></param>
+    /// <param name="sort"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WoodyPlantListModel))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<WoodyPlantListModel> GetAsync([FromQuery]WoodyPlantFilterModel filter, CancellationToken cancellationToken)
+    public Task<WoodyPlantListModel> GetAsync([FromQuery]WoodyPlantFilterModel filter, [FromQuery]WoodyPlantSortModel sort, CancellationToken cancellationToken)
     {
-      return fMediator.Send(new GetWoodyPlantsByFilterRequest(filter), cancellationToken);
+      return fMediator.Send(new GetWoodyPlantsByFilterRequest(filter, sort), cancellationToken);
     }
 
     /// <summary>

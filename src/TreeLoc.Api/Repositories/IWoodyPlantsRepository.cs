@@ -10,6 +10,6 @@ namespace TreeLoc.Api.Repositories
   public interface IWoodyPlantsRepository: IRepositoryBase<WoodyPlantDocument>
   {
     Task<long> CountByFilterAsync(WoodyPlantFilterModel woodyPlantFilterModel, CancellationToken cancellationToken);
-    Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel woodyPlantFilterModel, CancellationToken cancellationToken);
+    Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel filter, WoodyPlantSortModel sort, CancellationToken cancellationToken);
   }
 }

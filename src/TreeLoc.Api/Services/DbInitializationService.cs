@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -26,53 +25,59 @@ namespace TreeLoc.Api.Services
       var indexManager = collection.Indexes;
       await indexManager.CreateManyAsync(GetWoodyPlantsIndexes());
 
-      await collection.InsertOneAsync(new WoodyPlantDocument
+      for (int i = 0; i < 0; i++)
       {
-        ImageUrl = "www.google.com",
-        Location = new Location
+        var documents = new List<WoodyPlantDocument>();
+        for (int j = 0; j < 5000; j++)
         {
-          Geometry = new PointGeometry
+          documents.Add(new WoodyPlantDocument
           {
-            Coordinates = new double[] { 50, 14 }
-          }
-        },
-        Name = "Praha",
-        Note = "Lore impsum dolor",
-        Species = "Specie special",
-        LocalizedNames = new Tuple<string, string>[] { new Tuple<string, string>("cs", "Namee"), new Tuple<string, string>("en", "Nameee") }
-      });
+            ImageUrl = "www.google.com",
+            Location = new Location
+            {
+              Geometry = new PointGeometry
+              {
+                Coordinates = new double[] { 50, 14 }
+              }
+            },
+            LocalizedNames = new LocalizedString { Czech = "Praha" },
+            LocalizedNotes = new LocalizedString { Czech = "Lore impsum dolor" },
+            LocalizedSpecies = new LocalizedString { Czech = "Specie special" }
+          });
 
-      await collection.InsertOneAsync(new WoodyPlantDocument
-      {
-        ImageUrl = "www.google.com",
-        Location = new Location
-        {
-          Geometry = new PointGeometry
+          documents.Add(new WoodyPlantDocument
           {
-            Coordinates = new double[] { 40, -73 }
-          }
-        },
-        Name = "New york",
-        Note = "Lore impsum dolor",
-        Species = "Specie special",
-        LocalizedNames = new Tuple<string, string>[] { new Tuple<string, string>("cs", "Namee"), new Tuple<string, string>("en", "Nameee") }
-      });
+            ImageUrl = "www.google.com",
+            Location = new Location
+            {
+              Geometry = new PointGeometry
+              {
+                Coordinates = new double[] { 40, -73 }
+              }
+            },
+            LocalizedNames = new LocalizedString { Czech = "New york pošuk" },
+            LocalizedNotes = new LocalizedString { Czech = "Lore impsum dolor" },
+            LocalizedSpecies = new LocalizedString { Czech = "Specie special" }
+          });
 
-      await collection.InsertOneAsync(new WoodyPlantDocument
-      {
-        ImageUrl = "www.google.com",
-        Location = new Location
-        {
-          Geometry = new PointGeometry
+          documents.Add(new WoodyPlantDocument
           {
-            Coordinates = new double[] { 11, 22 }
-          }
-        },
-        Name = "Random",
-        Note = "Lore impsum dolor",
-        Species = "Namee specie",
-        LocalizedNotes = new Tuple<string, string>[] { new Tuple<string, string>("cs", "Namee"), new Tuple<string, string>("en", "Nameee") }
-      });
+            ImageUrl = "www.google.com",
+            Location = new Location
+            {
+              Geometry = new PointGeometry
+              {
+                Coordinates = new double[] { 11, 22 }
+              }
+            },
+            LocalizedNames = new LocalizedString { Czech = "Random" },
+            LocalizedNotes = new LocalizedString { Czech = "Lore impsum dolor hululu" },
+            LocalizedSpecies = new LocalizedString { Czech = "Namee specie locale řekl řecký řek" }
+          });
+        }
+
+        await collection.InsertManyAsync(documents,cancellationToken: cancellationToken);
+      }
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -84,9 +89,15 @@ namespace TreeLoc.Api.Services
     {
       var builder = Builders<WoodyPlantDocument>.IndexKeys;
 
-      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Ascending(x => x.Species));
-      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Ascending(x => x.Note));
-      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Ascending(x => x.Name));
+      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Combine(
+        builder.Text(x => x.LocalizedNames.Czech), 
+        builder.Text(x => x.LocalizedNotes.Czech), 
+        builder.Text(x => x.LocalizedSpecies.Czech)),
+        new CreateIndexOptions { LanguageOverride = "none" });
+
+      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Ascending(x => x.LocalizedSpecies.Czech), new CreateIndexOptions { Collation = new Collation("cs") });
+      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Ascending(x => x.LocalizedNames.Czech), new CreateIndexOptions { Collation = new Collation("cs") });
+      yield return new CreateIndexModel<WoodyPlantDocument>(builder.Ascending(x => x.LocalizedNotes.Czech), new CreateIndexOptions { Collation = new Collation("cs") });
       yield return new CreateIndexModel<WoodyPlantDocument>(builder.Geo2DSphere(x => x.Location!.Geometry));
     }
   }

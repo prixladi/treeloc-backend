@@ -1,20 +1,20 @@
-﻿using System;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TreeLoc.Database.Documents
 {
   [DbCollection("WoodyPlants")]
+  [BsonIgnoreExtraElements]
   public class WoodyPlantDocument: DocumentBase
   {
-    public string? Name { get; set; } 
-    public string? Species { get; set; }
-    public string? Note { get; set; } 
+    public LocalizedString LocalizedNames { get; set; } = new LocalizedString();
+    public LocalizedString LocalizedNotes { get; set; } = new LocalizedString();
+    public LocalizedString LocalizedSpecies { get; set; } = new LocalizedString();
     public string? ImageUrl { get; set; } 
     public Location? Location { get; set; } 
     public ObjectId[]? InnerWoodyPlantIds { get; set; }
 
-    public Tuple<string, string>[]? LocalizedNames { get; set; } 
-    public Tuple<string, string>[]? LocalizedNotes { get; set; } 
-    public Tuple<string, string>[]? LocalizedSpecies { get; set; } 
+    [BsonIgnoreIfNull]
+    public double? TextMatchScore { get; set; }
   }
 }

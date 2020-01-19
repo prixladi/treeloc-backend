@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MongoDB.Driver;
 using TreeLoc.Api.Extensions;
 using TreeLoc.Api.Models;
 using TreeLoc.Database;
@@ -21,16 +20,17 @@ namespace TreeLoc.Api.Repositories
       return Collection.CountAsync(filter.ToFilterDefinition(), cancellationToken: cancellationToken);
     }
 
-    public async Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel filter, CancellationToken cancellationToken)
+    public async Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel filter, WoodyPlantSortModel sort, CancellationToken cancellationToken)
     {
       if (filter is null)
         throw new ArgumentNullException(nameof(filter));
+      if (sort is null)
+        throw new ArgumentNullException(nameof(sort));
 
-      var cursor = await Collection.FindAsync(filter.ToFilterDefinition(), new FindOptions<WoodyPlantDocument, WoodyPlantDocument>
-      {
-        Skip = filter.Skip,
-        Limit = filter.Take
-      });
+      var cursor = await Collection.FindAsync(
+        filter.ToFilterDefinition(),
+        sort.ToFindOptions(filter.Skip, filter.Take, filter.Text != null),
+        cancellationToken);
 
       var plants = new List<WoodyPlantDocument>();
 

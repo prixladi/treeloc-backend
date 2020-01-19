@@ -6,9 +6,10 @@ namespace TreeLoc.Api.Models
   public class WoodyPlantPreviewModel
   {
     public ObjectId Id { get; set; }
-    public string? Name { get; set; } 
-    public string? ImageUrl { get; set; } 
-    public string? Note { get; set; } 
+    public LocalizedStringModel LocalizedNames { get; set; } = default!;
+    public LocalizedStringModel LocalizedNotes { get; set; } = default!;
+    public LocalizedStringModel LocalizedSpecies { get; set; } = default!;
+    public string? ImageUrl { get; set; } = default!;
     public Location? Location { get; set; }
   }
 }

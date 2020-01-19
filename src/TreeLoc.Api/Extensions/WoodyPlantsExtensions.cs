@@ -16,9 +16,10 @@ namespace TreeLoc.Api.Extensions
       return new WoodyPlantDetailModel
       {
         Id = doc.Id,
-        Name = doc.Name,
+        LocalizedNames = doc.LocalizedNames.ToModel(),
+        LocalizedNotes = doc.LocalizedNotes.ToModel(),
+        LocalizedSpecies = doc.LocalizedSpecies.ToModel(),
         ImageUrl = doc.ImageUrl,
-        Note = doc.Note,
         Location = doc.Location
       };
     }
@@ -31,9 +32,10 @@ namespace TreeLoc.Api.Extensions
       return new WoodyPlantPreviewModel
       {
         Id = doc.Id,
-        Name = doc.Name,
+        LocalizedNames = doc.LocalizedNames.ToModel(),
+        LocalizedNotes = doc.LocalizedNotes.ToModel(),
+        LocalizedSpecies = doc.LocalizedSpecies.ToModel(),
         ImageUrl = doc.ImageUrl,
-        Note = doc.Note,
         Location = doc.Location
       };
     }
