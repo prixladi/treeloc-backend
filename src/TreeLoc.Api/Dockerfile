@@ -9,10 +9,12 @@ WORKDIR /src
 
 COPY src/TreeLoc.Api/TreeLoc.Api.csproj TreeLoc.Api/
 COPY src/TreeLoc.Core/TreeLoc.Core.csproj TreeLoc.Core/
+COPY src/TreeLoc.Database/TreeLoc.Database.csproj TreeLoc.Database/
 RUN dotnet restore TreeLoc.Api/TreeLoc.Api.csproj
 
-COPY src/TreeLoc.Api/TreeLoc.Api.csproj src/TreeLoc.Api/
-COPY src/TreeLoc.Core/TreeLoc.Core.csproj src/TreeLoc.Core/
+COPY src/TreeLoc.Api/ TreeLoc.Api/
+COPY src/TreeLoc.Core/ TreeLoc.Core/
+COPY src/TreeLoc.Database/ TreeLoc.Database/
 WORKDIR /src/TreeLoc.Api
 RUN dotnet build TreeLoc.Api.csproj -c Release -o /app/build
 
