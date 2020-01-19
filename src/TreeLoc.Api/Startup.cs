@@ -14,7 +14,7 @@ namespace Treeloc
       services.AddExceptionHandling();
 
       services.AddControllers(ControllersConfig.Configure)
-        .AddJsonOptions(JsonConfig.Setup);
+        .AddNewtonsoftJson(JsonConfig.Setup);
 
       services.AddDbContext<DbConfig>();
 

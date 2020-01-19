@@ -6,10 +6,9 @@ namespace TreeLoc.Api.Configs
 {
   internal static class JsonConfig
   {
-    public static void Setup(JsonOptions jsonOptions)
+    public static void Setup(MvcNewtonsoftJsonOptions jsonOptions)
     {
-      jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-      jsonOptions.JsonSerializerOptions.Converters.Add(new ObjectIdJsonConverter());
+      jsonOptions.SerializerSettings.Converters.Add(new ObjectIdNewtonsoftJsonConverter());
     }
   }
 }
