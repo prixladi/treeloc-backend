@@ -2,7 +2,13 @@
 
 namespace TreeLoc.Database.Documents.Locations
 {
-  [BsonKnownTypes(typeof(PointGeometry))]
+  [BsonKnownTypes(
+    typeof(PointGeometry), 
+    typeof(MultiPointGeometry), 
+    typeof(LineStringGeometry), 
+    typeof(MultiLineStringGeometry), 
+    typeof(PolygonGeometry), 
+    typeof(MultiPolygonGeometry))]
   public abstract class GeometryBase
   {
     [BsonElement("type")]

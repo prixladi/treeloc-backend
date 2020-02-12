@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using MongoDB.Driver;
 using TreeLoc.Api.Models;
 using TreeLoc.Database.Documents;
@@ -22,10 +21,7 @@ namespace TreeLoc.Api.Extensions
       }
 
       if (model.Point != null)
-      {
-        Debug.Assert(model.Distance != null);
-        filter &= Builders<WoodyPlantDocument>.Filter.NearSphere(x => x.Location!.Geometry, model.Point.Latitude, model.Point.Longitude, model.Distance.Value);
-      }
+        filter &= Builders<WoodyPlantDocument>.Filter.NearSphere(x => x.Location!.Geometry, model.Point.Latitude, model.Point.Longitude, model.Distance);
 
       return filter;
     }

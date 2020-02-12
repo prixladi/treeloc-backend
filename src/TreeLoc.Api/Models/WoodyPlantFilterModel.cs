@@ -23,9 +23,6 @@ namespace TreeLoc.Api.Models
     {
       if (Text != null && Point != null)
         yield return new ValidationResult($"Cannot use GeoQuery and TextSearch in one Query", new string[] { nameof(Point), nameof(Text) });
-
-      if (Point == null != (Distance == null))
-        yield return new ValidationResult($"For geoquery you need both '{nameof(Point)}' and {nameof(Distance)} to be not null", new string[] { nameof(Point), nameof(Distance) });
     }
   }
 }
