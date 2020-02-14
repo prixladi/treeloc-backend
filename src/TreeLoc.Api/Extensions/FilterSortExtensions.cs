@@ -21,7 +21,7 @@ namespace TreeLoc.Api.Extensions
       }
 
       if (model.Point != null)
-        filter &= Builders<WoodyPlantDocument>.Filter.NearSphere(x => x.Location!.Geometry, model.Point.Latitude, model.Point.Longitude, model.Distance);
+        filter &= Builders<WoodyPlantDocument>.Filter.NearSphere(x => x.Location!.Geometry, model.Point.Longitude, model.Point.Latitude, model.Distance);
 
       return filter;
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -56,72 +57,106 @@ namespace TreeLoc.Api.Services
 
       var random = new Random();
 
-      for (int i = 0; i < 3; i++)
+      var list = new List<WoodyPlantDocument>();
+
+      for (int i = 0; i < 7000; i++)
       {
-        await collection.InsertManyAsync(new WoodyPlantDocument[]
+        list.Add(GetPointDocument(random));
+      }
+
+      for (int i = 0; i < 1000; i++)
+      {
+        list.Add(new WoodyPlantDocument
         {
-          new WoodyPlantDocument
+          LocalizedNotes = new LocalizedString { Czech = "Nevíme jak to pojmenovat" },
+          LocalizedSpecies = new LocalizedString { Czech = "Dub" },
+          ImageUrl = "https://google.com",
+          Location = new Location
+          {
+            Geometry = GetLineStringGeometry(random)
+          }
+        });
+      }
+
+      for (int i = 0; i < 0; i++)
+      {
+        list.Add(new WoodyPlantDocument
+        {
+          LocalizedNames = new LocalizedString { Czech = "Lesík u Vitějovic" },
+          LocalizedNotes = new LocalizedString { Czech = "Malý lesík" },
+          ImageUrl = "https://google.com",
+          Location = new Location
+          {
+            Geometry = GetPolygonGeometry(random)
+          }
+        });
+      }
+
+        await collection.InsertManyAsync(list, cancellationToken: cancellationToken);
+    }
+
+    private WoodyPlantDocument GetPointDocument(Random random)
+    {
+      var number = random.Next(1, 5);
+
+      switch (number)
+      {
+        case 1:
+          return new WoodyPlantDocument
           {
             LocalizedNames = new LocalizedString { Czech = "Lípa u nemocnice" },
-            LocalizedNotes = new LocalizedString { Czech = "Je hodně stará"},
+            LocalizedNotes = new LocalizedString { Czech = "Je hodně stará" },
             LocalizedSpecies = new LocalizedString { Czech = "Lípa srdčitá" },
             ImageUrl = "https://google.com",
             Location = new Location
             {
               Geometry = GetPointGeometry(random)
             }
-          },
-          new WoodyPlantDocument
+          };
+        case 2:
+          return new WoodyPlantDocument
           {
-            LocalizedNames = new LocalizedString { Czech = "Smrky u Netolic" },
-            LocalizedNotes = new LocalizedString { Czech = "Pár stromů, žádnej les"},
+            LocalizedNames = new LocalizedString { Czech = "Smrk v lesíku" },
             LocalizedSpecies = new LocalizedString { Czech = "Smrk obecný" },
             ImageUrl = "https://google.com",
             Location = new Location
             {
-              Geometry = GetMultiPointGeometry(random)
+              Geometry = GetPointGeometry(random)
             }
-          },
-          new WoodyPlantDocument
+          };
+        case 3:
+          return new WoodyPlantDocument
           {
-            LocalizedNotes = new LocalizedString { Czech = "Nevíme jak to pojmenovat"},
-            LocalizedSpecies = new LocalizedString { Czech = "Dub" },
+            LocalizedNames = new LocalizedString { Czech = "Památný Hloch" },
+            LocalizedSpecies = new LocalizedString { Czech = "Hloch pouličný" },
             ImageUrl = "https://google.com",
             Location = new Location
             {
-              Geometry = GetLineStringGeometry(random)
+              Geometry = GetPointGeometry(random)
             }
-          },
-          new WoodyPlantDocument
+          };
+        case 4:
+          return new WoodyPlantDocument
           {
-            LocalizedNotes = new LocalizedString { Czech = "No idea co to je ale je to tam" },
+            LocalizedNotes = new LocalizedString { Czech = "Roste zde již po 150 let a stále nejsme schopni zjistit o jaký strom se jedná a ani nevíme jak ho pojmenovat." },
             ImageUrl = "https://google.com",
             Location = new Location
             {
-              Geometry = GetMultiLineStringGeometry(random)
+              Geometry = GetPointGeometry(random)
             }
-          },
-          new WoodyPlantDocument
+          };
+        default:
+          return new WoodyPlantDocument
           {
-            LocalizedNames = new LocalizedString { Czech = "Lesík u Vitějovic" },
-            LocalizedNotes = new LocalizedString { Czech = "Malý lesík"},
+            LocalizedNames = new LocalizedString { Czech = "Strom" },
+            LocalizedNotes = new LocalizedString { Czech = "Strom obecný" },
+            LocalizedSpecies = new LocalizedString { Czech = "Obyčený neutrální strom." },
             ImageUrl = "https://google.com",
             Location = new Location
             {
-              Geometry = GetPolygonGeometry(random)
+              Geometry = GetPointGeometry(random)
             }
-          },
-          new WoodyPlantDocument
-          {
-            LocalizedNames = new LocalizedString { Czech = "Lesy u" },
-            LocalizedNotes = new LocalizedString { Czech = "Skupina lesů u"},
-            ImageUrl = "https://google.com",
-            Location = new Location
-            {
-              Geometry = GetMultiPolygonGeometry(random)
-            }
-          }
-        });
+          };
       }
     }
 
@@ -133,9 +168,9 @@ namespace TreeLoc.Api.Services
       };
     }
 
-    private double[] GetPoint(Random random)
+    private double[] GetPoint(Random random, double xOffset = 0, double yOffset = 0, double xCoef = 5, double yCoef = 2)
     {
-      return new double[] { 12.661745182000601 + random.NextDouble() * 5, 48.806820963248754 + random.NextDouble() * 2 };
+      return new double[] { 12.661745182000601 + xOffset + random.NextDouble() * xCoef, 48.806820963248754 + yOffset + random.NextDouble() * yCoef };
     }
 
 
@@ -156,7 +191,10 @@ namespace TreeLoc.Api.Services
 
     private double[][] GetLineString(Random random)
     {
-      return new double[][] { GetPoint(random), GetPoint(random) };
+      var firstPoint = GetPoint(random);
+      var secondPoint = new double[] { firstPoint[0] + random.NextDouble() * 0.01, firstPoint[1] + random.NextDouble() * 0.01 };
+      var thirdPoint = new double[] { secondPoint[0] + random.NextDouble() * 0.01, secondPoint[1] + random.NextDouble() * 0.01 };
+      return new double[][] { firstPoint, secondPoint, thirdPoint };
     }
 
     private MultiLineStringGeometry GetMultiLineStringGeometry(Random random)
@@ -176,13 +214,15 @@ namespace TreeLoc.Api.Services
 
     private double[][][] GetPolygon(Random random)
     {
-      var start = new double[] { 12.661745182000601 + random.NextDouble(), 48.806820963248754 + random.NextDouble() / 5 };
+      var offsetX = random.NextDouble();
+      var offsetY = random.NextDouble() / 5;
+      var start = new double[] { 12.661745182000601 + offsetX + random.NextDouble() / 5, 48.806820963248754 + offsetY + random.NextDouble() / 5 };
       var points = new double[][]
       {
         start,
-        new double[] { 13.661745182000601 + random.NextDouble(), 48.806820963248754 + random.NextDouble() / 5 },
-        new double[] { 13.661745182000601 + random.NextDouble(), 49.106820963248754 + random.NextDouble() / 5 },
-        new double[] { 12.661745182000601 + random.NextDouble(), 49.106820963248754 + random.NextDouble() / 5 },
+        new double[] { 13.661745182000601+ offsetX + random.NextDouble(), 48.806820963248754 + offsetY + random.NextDouble() / 5 },
+        new double[] { 13.661745182000601 + offsetX + random.NextDouble(), 49.106820963248754 + offsetY + random.NextDouble() / 5 },
+        new double[] { 12.661745182000601 + offsetX + random.NextDouble(), 49.106820963248754 + offsetY + random.NextDouble() / 5 },
         start
       };
 
