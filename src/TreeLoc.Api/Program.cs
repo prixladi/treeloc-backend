@@ -1,21 +1,26 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using TreeLoc.Api;
 
 namespace Treeloc
 {
   public class Program
   {
-    public static void Main(string[] args)
+    public static Task Main()
     {
-      CreateHostBuilder(args).Build().Run();
+      return CreateHostBuilder()
+        .Build()
+        .RunAsync();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args)
+    public static IHostBuilder CreateHostBuilder()
     {
-      return Host.CreateDefaultBuilder(args)
+      return new HostBuilder()
         .ConfigureWebHostDefaults(webBuilder =>
         {
           webBuilder.UseStartup<Startup>();
+          webBuilder.UseSentry(EnvironmentVariables.Get(EnvironmentVariables._SentryUrl));
         });
     }
   }

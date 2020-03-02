@@ -9,7 +9,7 @@ namespace TreeLoc.Api.Models
     [Required]
     public int Skip { get; set; }
 
-    [Range(1, 100)]
+    [Range(1, 300)]
     [Required]
     public int Take { get; set; }
 

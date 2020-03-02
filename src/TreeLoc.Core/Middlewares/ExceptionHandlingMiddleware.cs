@@ -24,9 +24,9 @@ namespace TreeLoc.Middlewares
     {
       try
       {
-         await fNext(context);
+        await fNext(context);
       }
-      catch(Exception ex)
+      catch (Exception ex)
       {
         fExceptionHandlingFacade.Handle(ex, out var message, out int statusCode);
 
@@ -35,6 +35,9 @@ namespace TreeLoc.Middlewares
         context.Response.ContentType = MediaTypeNames.Application.Json;
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsync(response, context.RequestAborted);
+        
+        if (statusCode >= 500)
+          throw;
       }
     }
   }
