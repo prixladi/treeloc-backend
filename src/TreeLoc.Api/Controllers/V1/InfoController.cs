@@ -15,7 +15,7 @@ namespace TreeLoc.Api.Controllers
     /// <returns>Model with info</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InfoModel))]
-    public InfoModel Get()
+    public IActionResult Get()
     {
       var version = Assembly
         .GetEntryAssembly()!
@@ -24,7 +24,7 @@ namespace TreeLoc.Api.Controllers
 
       Debug.Assert(version != null);
 
-      return new InfoModel { Version = version };
+      return Ok(new InfoModel { Version = version });
     }
   }
 }

@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using TreeLoc.Api;
 
 namespace Treeloc
 {
-  public class Program
+  [ExcludeFromCodeCoverage]
+  public sealed class Program
   {
     public static Task Main()
     {

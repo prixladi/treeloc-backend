@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using TreeLoc.Database.Documents.Locations;
 
 namespace TreeLoc.Api.Services
 {
+  [ExcludeFromCodeCoverage]
   public class DbInitializationService: IHostedService
   {
     private readonly DbContext fDbContext;

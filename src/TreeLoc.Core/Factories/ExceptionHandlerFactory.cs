@@ -10,7 +10,7 @@ namespace TreeLoc.Factories
     public ExceptionHandlerFactory(IEnumerable<IExceptionHandler> products)
       : base(products) { }
 
-    public IExceptionHandler CreateOne(Exception ex)
+    public IExceptionHandler? CreateOne(Exception ex)
     {
       return GetOne(x => x.CanHandle(ex));
     }

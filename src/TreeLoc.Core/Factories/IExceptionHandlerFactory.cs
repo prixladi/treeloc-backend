@@ -5,6 +5,6 @@ namespace TreeLoc.Factories
 {
   public interface IExceptionHandlerFactory
   {
-    IExceptionHandler CreateOne(Exception ex);
+    IExceptionHandler? CreateOne(Exception ex);
   }
 }

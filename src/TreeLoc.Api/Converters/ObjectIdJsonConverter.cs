@@ -1,20 +1,38 @@
 ﻿using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 
 namespace TreeLoc.Api.Converters
 {
-  public class ObjectIdJsonConverter: JsonConverter<ObjectId>
+  public class ObjectIdJsonConverter: JsonConverter
   {
-    public override ObjectId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override bool CanConvert(Type objectType)
     {
-      throw new NotImplementedException();
+      return objectType == typeof(ObjectId)
+        || objectType == typeof(ObjectId?);
     }
 
-    public override void Write(Utf8JsonWriter writer, ObjectId value, JsonSerializerOptions options)
+    public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer)
     {
-      writer.WriteStringValue(value.ToString());
+      if (reader.TokenType == JsonToken.Null && objectType == typeof(ObjectId?))
+        return null;
+
+      if (reader.TokenType != JsonToken.String)
+        throw new InvalidOperationException($"Unexpected token while convering '{typeof(ObjectId)}'. Očekáván '{JsonToken.String}', přijato {reader.TokenType}.");
+
+      string? value = (string?)reader.Value;
+      if (ObjectId.TryParse(value, out var objectId))
+        return objectId;
+      else
+        throw new JsonException($"String '{value}' cannot be converted to '{typeof(ObjectId)}'.");
+    }
+
+    public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer)
+    {
+      if (value is ObjectId objectId)
+        writer.WriteValue(objectId.ToString());
+      else
+        throw new ArgumentException($"Parameter is not of type '{typeof(ObjectId)}'.", nameof(value));
     }
   }
 }

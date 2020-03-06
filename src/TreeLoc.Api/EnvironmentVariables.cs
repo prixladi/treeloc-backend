@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TreeLoc.Api
 {
+  [ExcludeFromCodeCoverage]
   public static class EnvironmentVariables
   {
     public const string _MongoUrl = "MONGO_URL";

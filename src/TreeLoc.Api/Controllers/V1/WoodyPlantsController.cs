@@ -21,7 +21,7 @@ namespace TreeLoc.Api.Controllers.V1
     }
 
     /// <summary>
-    /// Returns detail about Woody plant
+    /// Returns woody plants preview
     /// </summary>
     /// <param name="filter"></param>
     /// <param name="sort"></param>
@@ -30,7 +30,7 @@ namespace TreeLoc.Api.Controllers.V1
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WoodyPlantListModel))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Task<WoodyPlantListModel> GetAsync([FromQuery]WoodyPlantFilterModel filter, [FromQuery]WoodyPlantSortModel sort, CancellationToken cancellationToken)
+    public Task<WoodyPlantListModel> GetManyAsync([FromQuery]WoodyPlantFilterModel filter, [FromQuery]WoodyPlantSortModel sort, CancellationToken cancellationToken)
     {
       return fMediator.Send(new GetWoodyPlantsByFilterRequest(filter, sort), cancellationToken);
     }

@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  test:
+    image: treeloc/tests
+    build:
+      context: ..
+      dockerfile: ./tests/Dockerfile
+    volumes:
+      - ./coverage/:/coverage/
+
+  nginx:
+    image: nginx:1.12-alpine
+    volumes:
+      - ./coverage:/usr/share/nginx/html
+    ports:
+      - 80:80

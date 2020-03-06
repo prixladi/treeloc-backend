@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace TreeLoc.Api.Validation
 {
-  public class AllowedValuesAttribute: ValidationAttribute
+  public sealed class AllowedValuesAttribute: ValidationAttribute
   {
     private readonly string[] fValues;
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -8,6 +9,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace TreeLoc.Api.Swagger
 {
+  [ExcludeFromCodeCoverage]
   public class FlattenObjectIdOperationFilter: IOperationFilter
   {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)

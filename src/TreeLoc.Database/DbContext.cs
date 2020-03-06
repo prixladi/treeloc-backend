@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson;
+using System.Diagnostics.CodeAnalysis;
 using MongoDB.Driver;
 
 namespace TreeLoc.Database
 {
+  [ExcludeFromCodeCoverage]
   public class DbContext
   {
     public IDbConfig Config { get; }

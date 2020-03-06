@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Diagnostics.CodeAnalysis;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using TreeLoc.Api.Configs;
@@ -6,6 +7,7 @@ using TreeLoc.Api.IoC;
 
 namespace Treeloc
 {
+  [ExcludeFromCodeCoverage]
   public class Startup
   {
     public void ConfigureServices(IServiceCollection services)

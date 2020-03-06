@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
@@ -11,6 +12,7 @@ using TreeLoc.Api.Swagger;
 
 namespace TreeLoc.Api.Configs
 {
+  [ExcludeFromCodeCoverage]
   internal static class SwaggerConfig
   {
     public const string _SwaggerSecurityDefinitionName = "BasicAuthentication";
