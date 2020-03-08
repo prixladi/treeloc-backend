@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using TreeLoc.Database;
 using TreeLoc.Facades;
 using TreeLoc.Factories;
@@ -6,6 +7,7 @@ using TreeLoc.Handlers.Exceptions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+  [ExcludeFromCodeCoverage]
   public static class ServiceCollectionExtensions
   {
     public static void AddExceptionHandling(this IServiceCollection services)

@@ -12,7 +12,7 @@ namespace TreeLoc.Middlewares
     private readonly IExceptionHandlingFacade fExceptionHandlingFacade;
 
     public ExceptionHandlingMiddleware(
-       RequestDelegate next,
+      RequestDelegate next,
       IExceptionHandlingFacade exceptionHandlingFacade)
     {
       fNext = next;
@@ -35,7 +35,7 @@ namespace TreeLoc.Middlewares
         context.Response.ContentType = MediaTypeNames.Application.Json;
         context.Response.StatusCode = statusCode;
         await context.Response.WriteAsync(response, context.RequestAborted);
-        
+
         if (statusCode >= 500)
           throw;
       }

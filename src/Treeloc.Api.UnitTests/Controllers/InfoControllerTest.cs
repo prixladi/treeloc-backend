@@ -17,7 +17,8 @@ namespace Treeloc.Api.UnitTests.Controllers
 
       var result = controller.Get();
       var objResult = Assert.IsType<OkObjectResult>(result);
-      Assert.IsType<InfoModel>(objResult.Value);
+      var model = Assert.IsType<InfoModel>(objResult.Value);
+      Assert.NotNull(model.Version);
     }
   }
 }

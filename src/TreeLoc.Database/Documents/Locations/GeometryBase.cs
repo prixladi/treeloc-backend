@@ -12,6 +12,6 @@ namespace TreeLoc.Database.Documents.Locations
   public abstract class GeometryBase
   {
     [BsonElement("type")]
-    public virtual string Type { get; set; } = default!;
+    public abstract string Type { get; set; }
   }
 }

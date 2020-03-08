@@ -26,8 +26,18 @@ namespace Treeloc.Api.UnitTests.Binders
       string modelName = "model";
 
       fContext.ModelName.Returns(modelName);
+      fContext.ModelType.Returns(typeof(ObjectId));
       fValueProvider.GetValue(Arg.Is(modelName)).Returns(ValueProviderResult.None);
 
+      var binder = new ObjectIdBinder();
+      var result = binder.BindModelAsync(fContext);
+
+      Assert.True(result.IsCompleted);
+    }
+
+    [Fact]
+    public void BindModel_InvalType_TestAsync()
+    {
       var binder = new ObjectIdBinder();
       var result = binder.BindModelAsync(fContext);
 

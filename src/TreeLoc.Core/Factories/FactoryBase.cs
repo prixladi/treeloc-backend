@@ -13,11 +13,6 @@ namespace TreeLoc.Factories
       fProducts = products;
     }
 
-    protected IEnumerable<THandler> GetMany()
-    {
-      return fProducts;
-    }
-
     public THandler GetOne(Func<THandler, bool> predicate)
     {
       return fProducts

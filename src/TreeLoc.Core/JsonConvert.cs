@@ -25,14 +25,6 @@ namespace TreeLoc
       }
     }
 
-    public static Task<string> SerializeAsync<T>(T value, JsonConverter converter, CancellationToken cancellationToken)
-    {
-      var options = new JsonSerializerOptions();
-      options.Converters.Add(converter);
-
-      return SerializeAsync(value, options, cancellationToken);
-    }
-
     public static Task<string> SerializeAsync<T>(T value, CancellationToken cancellationToken)
     {
       return SerializeAsync(value, options: null, cancellationToken);
