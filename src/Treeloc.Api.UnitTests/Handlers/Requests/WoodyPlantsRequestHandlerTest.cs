@@ -72,7 +72,7 @@ namespace Treeloc.Api.UnitTests.Handlers.Requests
       {
         Id = id,
         TextMatchScore = 5,
-        ImageUrl = "http://obj.cz",
+        ImageUrls = new[] { "http://obj.cz" },
         Location = new Location { Name = "Loc", Geometry = new PointGeometry() },
         InnerWoodyPlantIds = Array.Empty<ObjectId>(),
         LocalizedNames = new LocalizedString { Czech = "name" },

@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using System;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace TreeLoc.Database.Documents
@@ -10,7 +11,7 @@ namespace TreeLoc.Database.Documents
     public LocalizedString LocalizedNames { get; set; } = new LocalizedString();
     public LocalizedString LocalizedNotes { get; set; } = new LocalizedString();
     public LocalizedString LocalizedSpecies { get; set; } = new LocalizedString();
-    public string? ImageUrl { get; set; } 
+    public string[] ImageUrls { get; set; } = Array.Empty<string>();
     public Location? Location { get; set; } 
     public ObjectId[]? InnerWoodyPlantIds { get; set; }
 

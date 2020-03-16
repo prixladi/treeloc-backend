@@ -24,11 +24,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4BFDF0BE-1345-4042-B628-41ACFAFCF691}"
 	ProjectSection(SolutionItems) = preProject
 		tests\docker-compose.yml = tests\docker-compose.yml
-		tests\Dockerfile.test = tests\Dockerfile.test
+		tests\Dockerfile = tests\Dockerfile
 		tests\test.sh = tests\test.sh
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TreeLoc.Core.UnitTests", "src\TreeLoc.Core.UnitTests\TreeLoc.Core.UnitTests.csproj", "{6AA84D48-43C5-4185-80C8-9C4618EA3361}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TreeLoc.Core.UnitTests", "src\TreeLoc.Core.UnitTests\TreeLoc.Core.UnitTests.csproj", "{6AA84D48-43C5-4185-80C8-9C4618EA3361}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

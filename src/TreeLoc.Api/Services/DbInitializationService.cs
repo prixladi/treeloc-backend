@@ -27,13 +27,21 @@ namespace TreeLoc.Api.Services
       var collection = fDbContext.Database.GetCollection<WoodyPlantDocument>();
       var indexManager = collection.Indexes;
       await indexManager.CreateManyAsync(GetWoodyPlantsIndexes());
-
+      await MigrateAsync(collection, cancellationToken);
       await FillDbAsync(collection, cancellationToken);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
       return Task.CompletedTask;
+    }
+
+    private async Task MigrateAsync(IMongoCollection<WoodyPlantDocument> collection, CancellationToken cancellationToken)
+    {
+      var filter = Builders<WoodyPlantDocument>.Filter.Exists("ImageUrl", true);
+      var count = await collection.CountDocumentsAsync(filter, null, cancellationToken);
+      if (count > 0)
+        await collection.DeleteManyAsync(Builders<WoodyPlantDocument>.Filter.Empty, cancellationToken);
     }
 
     private IEnumerable<CreateIndexModel<WoodyPlantDocument>> GetWoodyPlantsIndexes()
@@ -72,7 +80,7 @@ namespace TreeLoc.Api.Services
         {
           LocalizedNotes = new LocalizedString { Czech = "Nevíme jak to pojmenovat" },
           LocalizedSpecies = new LocalizedString { Czech = "Dub" },
-          ImageUrl = "https://google.com",
+          ImageUrls = new[] { "https://google.com" },
           Location = new Location
           {
             Geometry = GetLineStringGeometry(random)
@@ -86,7 +94,7 @@ namespace TreeLoc.Api.Services
         {
           LocalizedNames = new LocalizedString { Czech = "Lesík u Vitějovic" },
           LocalizedNotes = new LocalizedString { Czech = "Malý lesík" },
-          ImageUrl = "https://google.com",
+          ImageUrls = new[] { "https://google.com", "https://dot.com" },
           Location = new Location
           {
             Geometry = GetPolygonGeometry(random)
@@ -94,7 +102,7 @@ namespace TreeLoc.Api.Services
         });
       }
 
-        await collection.InsertManyAsync(list, cancellationToken: cancellationToken);
+      await collection.InsertManyAsync(list, cancellationToken: cancellationToken);
     }
 
     private WoodyPlantDocument GetPointDocument(Random random)
@@ -109,7 +117,7 @@ namespace TreeLoc.Api.Services
             LocalizedNames = new LocalizedString { Czech = "Lípa u nemocnice" },
             LocalizedNotes = new LocalizedString { Czech = "Je hodně stará" },
             LocalizedSpecies = new LocalizedString { Czech = "Lípa srdčitá" },
-            ImageUrl = "https://google.com",
+            ImageUrls = new[] { "https://google.com" },
             Location = new Location
             {
               Geometry = GetPointGeometry(random)
@@ -120,7 +128,6 @@ namespace TreeLoc.Api.Services
           {
             LocalizedNames = new LocalizedString { Czech = "Smrk v lesíku" },
             LocalizedSpecies = new LocalizedString { Czech = "Smrk obecný" },
-            ImageUrl = "https://google.com",
             Location = new Location
             {
               Geometry = GetPointGeometry(random)
@@ -131,7 +138,7 @@ namespace TreeLoc.Api.Services
           {
             LocalizedNames = new LocalizedString { Czech = "Památný Hloch" },
             LocalizedSpecies = new LocalizedString { Czech = "Hloch pouličný" },
-            ImageUrl = "https://google.com",
+            ImageUrls = new[] { "https://google.com" },
             Location = new Location
             {
               Geometry = GetPointGeometry(random)
@@ -141,7 +148,7 @@ namespace TreeLoc.Api.Services
           return new WoodyPlantDocument
           {
             LocalizedNotes = new LocalizedString { Czech = "Roste zde již po 150 let a stále nejsme schopni zjistit o jaký strom se jedná a ani nevíme jak ho pojmenovat." },
-            ImageUrl = "https://google.com",
+            ImageUrls = new[] { "https://google.com", "https://dot.com" },
             Location = new Location
             {
               Geometry = GetPointGeometry(random)
@@ -153,7 +160,6 @@ namespace TreeLoc.Api.Services
             LocalizedNames = new LocalizedString { Czech = "Strom" },
             LocalizedNotes = new LocalizedString { Czech = "Strom obecný" },
             LocalizedSpecies = new LocalizedString { Czech = "Obyčený neutrální strom." },
-            ImageUrl = "https://google.com",
             Location = new Location
             {
               Geometry = GetPointGeometry(random)
