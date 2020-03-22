@@ -8,12 +8,14 @@ namespace TreeLoc.Database.Documents
   [BsonIgnoreExtraElements]
   public class WoodyPlantDocument: DocumentBase
   {
-    public LocalizedString LocalizedNames { get; set; } = new LocalizedString();
-    public LocalizedString LocalizedNotes { get; set; } = new LocalizedString();
-    public LocalizedString LocalizedSpecies { get; set; } = new LocalizedString();
+    public LocalizedStringDocument LocalizedNames { get; set; } = new LocalizedStringDocument();
+    public LocalizedStringDocument LocalizedNotes { get; set; } = new LocalizedStringDocument();
+    public LocalizedStringDocument LocalizedSpecies { get; set; } = new LocalizedStringDocument();
     public string[] ImageUrls { get; set; } = Array.Empty<string>();
-    public Location? Location { get; set; } 
-    public ObjectId[]? InnerWoodyPlantIds { get; set; }
+    public PlantType Type { get; set; }
+    public LocationDocument Location { get; set; } = new LocationDocument();
+    public ObjectId[] InnerWoodyPlantIds { get; set; } = Array.Empty<ObjectId>();
+    public string? Version { get; set; }
 
     [BsonIgnoreIfNull]
     public double? TextMatchScore { get; set; }

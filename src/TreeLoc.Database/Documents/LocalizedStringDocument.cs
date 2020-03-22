@@ -3,7 +3,7 @@
 namespace TreeLoc.Database.Documents
 {
   [BsonIgnoreExtraElements]
-  public class LocalizedString
+  public class LocalizedStringDocument
   {
     [BsonElement("cs")]
     public string? Czech { get; set; }

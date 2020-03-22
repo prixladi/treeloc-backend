@@ -20,7 +20,7 @@ namespace TreeLoc.Api.Extensions
         LocalizedNotes = doc.LocalizedNotes.ToModel(),
         LocalizedSpecies = doc.LocalizedSpecies.ToModel(),
         ImageUrls = doc.ImageUrls,
-        Location = doc.Location
+        Location = doc.Location.ToModel()
       };
     }
 
@@ -36,7 +36,7 @@ namespace TreeLoc.Api.Extensions
         LocalizedNotes = doc.LocalizedNotes.ToModel(),
         LocalizedSpecies = doc.LocalizedSpecies.ToModel(),
         ImageUrls = doc.ImageUrls,
-        Location = doc.Location
+        Location = doc.Location.ToModel()
       };
     }
 

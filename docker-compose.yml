@@ -12,6 +12,18 @@ services:
       context: .
       dockerfile: src/TreeLoc.Api/Dockerfile
 
+  loader:
+    image: treeloc/loader
+    ports:
+      - "4546:80"
+    environment:
+      MONGO_URL: "mongodb://mongodb:27017"
+      MONGO_DATABASE_NAME: "TreeLoc"
+      LOADER_DELAY: "20"
+    build:
+      context: .
+      dockerfile: src/TreeLoc.Loader/Dockerfile
+
   mongodb:
     image: mongo:latest
     environment:

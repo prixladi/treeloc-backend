@@ -15,9 +15,12 @@ namespace TreeLoc.Api.Repositories
     public WoodyPlantsRepository(DbContext dbContext)
       : base(dbContext) { }
 
-    public Task<long> CountByFilterAsync(WoodyPlantFilterModel filter, CancellationToken cancellationToken)
+    public async Task<long> CountByFilterAsync(WoodyPlantFilterModel filter, CancellationToken cancellationToken)
     {
-      return Collection.CountAsync(filter.ToFilterDefinition(), cancellationToken: cancellationToken);
+      if (filter.Point != null)
+        return -1;
+
+      return await Collection.CountDocumentsAsync(filter.ToFilterDefinition(), cancellationToken: cancellationToken);
     }
 
     public async Task<List<WoodyPlantDocument>> GetByFilterAsync(WoodyPlantFilterModel filter, WoodyPlantSortModel sort, CancellationToken cancellationToken)
@@ -30,7 +33,7 @@ namespace TreeLoc.Api.Repositories
       var cursor = await Collection.FindAsync(
         filter.ToFilterDefinition(),
         sort.ToFindOptions(filter.Skip, filter.Take, filter.Text != null),
-        cancellationToken);
+        cancellationToken); 
 
       var plants = new List<WoodyPlantDocument>();
 

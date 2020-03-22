@@ -73,11 +73,11 @@ namespace Treeloc.Api.UnitTests.Handlers.Requests
         Id = id,
         TextMatchScore = 5,
         ImageUrls = new[] { "http://obj.cz" },
-        Location = new Location { Name = "Loc", Geometry = new PointGeometry() },
+        Location = new LocationDocument { Name = "Loc", Geometry = new PointGeometry() },
         InnerWoodyPlantIds = Array.Empty<ObjectId>(),
-        LocalizedNames = new LocalizedString { Czech = "name" },
-        LocalizedNotes = new LocalizedString { Czech = "note" },
-        LocalizedSpecies = new LocalizedString { Czech = "specie" }
+        LocalizedNames = new LocalizedStringDocument { Czech = "name" },
+        LocalizedNotes = new LocalizedStringDocument { Czech = "note" },
+        LocalizedSpecies = new LocalizedStringDocument { Czech = "specie" }
       };
 
       fWoodyPlantsRepository
