@@ -21,7 +21,7 @@ namespace TreeLoc.Loader.Services
       "Jihomoravský",
       "Jihočeský",
       "Karlovarský",
-      "Královehradecký",
+      "Královéhradecký",
       "Liberecký",
       "Moravskoslezský",
       "Olomoucký",
