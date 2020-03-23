@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TreeLoc.Loader.Configs;
 using TreeLoc.Loader.Repositories;
 using TreeLoc.Loader.Services;
+using TreeLoc.Loader.SignalR;
 
 namespace TreeLoc.Loader
 {
@@ -12,6 +13,7 @@ namespace TreeLoc.Loader
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<DbConfig>();
+      services.AddSignalR();
 
       services.AddHostedService<LoaderService>();
       services.AddHostedService<DiscoveryService>();
@@ -25,6 +27,11 @@ namespace TreeLoc.Loader
     public void Configure(IApplicationBuilder app)
     {
       app.UseRouting();
+
+      app.UseEndpoints(conf =>
+      {
+        conf.MapHub<ClientHub>("signalr");
+      });
     }
   }
 }

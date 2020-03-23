@@ -17,9 +17,14 @@ namespace TreeLoc.Loader.Repositories
       await Collection.InsertManyAsync(documents, cancellationToken: cancellationToken);
     }
 
-    public async Task DelteInvalidAsync(string version, CancellationToken cancellationToken)
+    public async Task DeleteInvalidAsync(string version, CancellationToken cancellationToken)
     {
-      await Collection.DeleteManyAsync(x => x.Version != version, cancellationToken: cancellationToken);
+      await Collection.DeleteManyAsync(doc => doc.Version != version, cancellationToken: cancellationToken);
+    }
+
+    public async Task DeleteAsync(CancellationToken cancellationToken)
+    {
+      await Collection.DeleteManyAsync(Builders<WoodyPlantDocument>.Filter.Empty, cancellationToken: cancellationToken);
     }
   }
 }

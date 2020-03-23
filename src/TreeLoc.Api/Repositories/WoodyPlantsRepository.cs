@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using TreeLoc.Api.Extensions;
 using TreeLoc.Api.Models;
 using TreeLoc.Database;
@@ -16,14 +17,16 @@ namespace TreeLoc.Api.Repositories
     public WoodyPlantsRepository(DbContext dbContext)
       : base(dbContext) { }
 
-    public async Task<long> CountAsync(CancellationToken cancellationToken)
+    public async Task<long> CountWithCoordsAsync(CancellationToken cancellationToken)
     {
-      return await Collection.CountDocumentsAsync(Builders<WoodyPlantDocument>.Filter.Empty, null, cancellationToken);
+      return await Collection.CountDocumentsAsync(doc => doc.Location.Geometry != null, null, cancellationToken);
     }
 
-    public async Task<List<WoodyPlantDocument>> GetAsync(CancellationToken cancellationToken)
+    public async Task<List<WoodyPlantDocument>> GetWithCoordsAsync(CancellationToken cancellationToken)
     {
-      return await Query.ToListAsync(cancellationToken);
+      return await Query
+        .Where(doc => doc.Location.Geometry != null)
+        .ToListAsync(cancellationToken);
     }
 
     public async Task<long> CountByFilterAsync(WoodyPlantFilterModel filter, CancellationToken cancellationToken)

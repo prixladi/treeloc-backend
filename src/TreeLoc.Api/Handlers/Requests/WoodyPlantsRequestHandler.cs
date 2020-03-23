@@ -36,9 +36,9 @@ namespace TreeLoc.Api.Handlers.Requests
       var plants = await fWoodyPlantsRepository.GetByFilterAsync(request.Filter, request.Sort, cancellationToken);
       var versionDoc = await fVersionRepository.GetSingleAsync(cancellationToken);
 
-      if (await IsEmptyFilterAsync(request.Filter, request.Sort, cancellationToken))
+      if (await IsFillCoordsFilterAsync(request.Filter, request.Sort, cancellationToken))
       {
-        var all = await fWoodyPlantsRepository.GetAsync(cancellationToken);
+        var all = await fWoodyPlantsRepository.GetWithCoordsAsync(cancellationToken);
         return new WoodyPlantListModel
         {
           TotalCount = all.Count,
@@ -55,17 +55,18 @@ namespace TreeLoc.Api.Handlers.Requests
       };
     }
 
-    private async Task<bool> IsEmptyFilterAsync(WoodyPlantFilterModel filter, WoodyPlantSortModel sort, CancellationToken cancellationToken)
+    private async Task<bool> IsFillCoordsFilterAsync(WoodyPlantFilterModel filter, WoodyPlantSortModel sort, CancellationToken cancellationToken)
     {
-      var noFilter = filter.Distance == null
+      var pointFilter = filter.Distance == null
         && filter.Text == null
         && filter.Skip == 0
-        && sort.SortBy == null;
+        && sort.SortBy == null
+        && filter.Point != null;
 
-      if (!noFilter)
+      if (!pointFilter)
         return false;
 
-      var count = await fWoodyPlantsRepository.CountAsync(cancellationToken);
+      var count = await fWoodyPlantsRepository.CountWithCoordsAsync(cancellationToken);
 
       return count <= filter.Take;
     }

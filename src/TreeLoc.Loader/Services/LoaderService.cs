@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using TreeLoc.Extension;
 using TreeLoc.Loader.Repositories;
+using TreeLoc.Loader.SignalR;
 using TreeLoc.OFN;
 
 namespace TreeLoc.Loader.Services
@@ -14,28 +16,30 @@ namespace TreeLoc.Loader.Services
     private readonly IResourcesRepository fResourcesRepository;
     private readonly IVersionRepository fVersionRepository;
     private readonly IWoodyPlantRepository fWoodyPlantRepository;
+    private readonly IHubContext<ClientHub> fHubContext;
+
     private Task? fLoaderTask;
     private CancellationTokenSource? fCancellationTokenSource;
 
     public LoaderService(
       IResourcesRepository resourcesRepository,
       IVersionRepository versionRepository,
-      IWoodyPlantRepository woodyPlantRepository)
+      IWoodyPlantRepository woodyPlantRepository,
+      IHubContext<ClientHub> hubContext)
     {
       fResourcesRepository = resourcesRepository;
       fVersionRepository = versionRepository;
       fWoodyPlantRepository = woodyPlantRepository;
+      fHubContext = hubContext;
     }
 
-    public Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
       fCancellationTokenSource = new CancellationTokenSource();
 
       var delay = EnvironmentVariables.Get(EnvironmentVariables._LoaderDelay);
-
+      await fWoodyPlantRepository.DeleteAsync(cancellationToken);
       fLoaderTask = LoadAsync(TimeSpan.FromSeconds(int.Parse(delay ?? "60")), fCancellationTokenSource.Token);
-
-      return Task.CompletedTask;
     }
 
     public async Task StopAsync(CancellationToken cancellationToken)
@@ -56,7 +60,7 @@ namespace TreeLoc.Loader.Services
 
     private async Task LoadAsync(TimeSpan delay, CancellationToken cancellationToken)
     {
-      string version = DateTime.UtcNow.GetHashCode().ToString();
+      string runVersion = DateTime.UtcNow.GetHashCode().ToString();
 
       while (true)
       {
@@ -66,12 +70,16 @@ namespace TreeLoc.Loader.Services
           try
           {
             var data = await LoadAsync(resource, cancellationToken);
-            var documents = data.ToDocument(version);
+            var documents = data.ToDocument(runVersion);
 
             await fWoodyPlantRepository.InsertManyAsync(documents, cancellationToken);
-            await fWoodyPlantRepository.DelteInvalidAsync(version, cancellationToken);
-            await fVersionRepository.UpdateAsync(DateTime.UtcNow.GetHashCode().ToString(), cancellationToken);
+            await fWoodyPlantRepository.DeleteInvalidAsync(runVersion, cancellationToken);
+
             fResourcesRepository.SetTrue(resource);
+
+            var dataVersion = DateTime.UtcNow.GetHashCode().ToString();
+            await fVersionRepository.UpdateAsync(dataVersion, cancellationToken);
+            await fHubContext.SendVersionChangedAsync(dataVersion, cancellationToken);
 
             Console.WriteLine($"Successfuly loaded data from resource '{resource}'");
           }
@@ -85,7 +93,7 @@ namespace TreeLoc.Loader.Services
         }
 
         if (!resources.Any())
-          await Task.Delay(delay, cancellationToken);
+          await Task.Delay(TimeSpan.FromMilliseconds(500), cancellationToken);
       }
     }
 

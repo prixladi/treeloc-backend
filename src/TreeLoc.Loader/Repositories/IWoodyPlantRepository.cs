@@ -8,6 +8,7 @@ namespace TreeLoc.Loader.Repositories
   public interface IWoodyPlantRepository: IRepositoryBase<WoodyPlantDocument>
   {
     Task InsertManyAsync(WoodyPlantDocument[] documents, CancellationToken cancellationToken);
-    Task DelteInvalidAsync(string version, CancellationToken cancellationToken);
+    Task DeleteInvalidAsync(string version, CancellationToken cancellationToken);
+    Task DeleteAsync(CancellationToken cancellationToken);
   }
 }
