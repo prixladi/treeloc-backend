@@ -2,6 +2,6 @@
 {
   public class InfoModel
   {
-    public string Version { get; set; } = default!;
+    public string? Version { get; set; } = default!;
   }
 }

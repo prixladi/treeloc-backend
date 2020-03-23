@@ -14,10 +14,12 @@ namespace TreeLoc.Api.Handlers.Requests
     IRequestHandler<GetWoodyPlantsByFilterRequest, WoodyPlantListModel>
   {
     private readonly IWoodyPlantsRepository fWoodyPlantsRepository;
+    private readonly IVersionRepository fVersionRepository;
 
-    public WoodyPlantsRequestHandler(IWoodyPlantsRepository woodyPlantsRepository)
+    public WoodyPlantsRequestHandler(IWoodyPlantsRepository woodyPlantsRepository, IVersionRepository versionRepository)
     {
       fWoodyPlantsRepository = woodyPlantsRepository;
+      fVersionRepository = versionRepository;
     }
 
     public async Task<WoodyPlantDetailModel> Handle(GetWoodyPlantRequest request, CancellationToken cancellationToken)
@@ -32,12 +34,40 @@ namespace TreeLoc.Api.Handlers.Requests
     public async Task<WoodyPlantListModel> Handle(GetWoodyPlantsByFilterRequest request, CancellationToken cancellationToken)
     {
       var plants = await fWoodyPlantsRepository.GetByFilterAsync(request.Filter, request.Sort, cancellationToken);
+      var versionDoc = await fVersionRepository.GetSingleAsync(cancellationToken);
+
+      if (await IsEmptyFilterAsync(request.Filter, request.Sort, cancellationToken))
+      {
+        var all = await fWoodyPlantsRepository.GetAsync(cancellationToken);
+        return new WoodyPlantListModel
+        {
+          TotalCount = all.Count,
+          WoodyPlants = all.ToPreview(),
+          DataVersion = versionDoc?.Version
+        };
+      }
 
       return new WoodyPlantListModel
       {
         TotalCount = await fWoodyPlantsRepository.CountByFilterAsync(request.Filter, cancellationToken),
-        WoodyPlants = plants.ToPreview()
+        WoodyPlants = plants.ToPreview(),
+        DataVersion = versionDoc?.Version
       };
+    }
+
+    private async Task<bool> IsEmptyFilterAsync(WoodyPlantFilterModel filter, WoodyPlantSortModel sort, CancellationToken cancellationToken)
+    {
+      var noFilter = filter.Distance == null
+        && filter.Text == null
+        && filter.Skip == 0
+        && sort.SortBy == null;
+
+      if (!noFilter)
+        return false;
+
+      var count = await fWoodyPlantsRepository.CountAsync(cancellationToken);
+
+      return count <= filter.Take;
     }
   }
 }

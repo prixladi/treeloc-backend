@@ -8,6 +8,7 @@ namespace TreeLoc.Api.IoC
     public static void AddRepositories(this IServiceCollection services)
     {
       services.AddTransient<IWoodyPlantsRepository, WoodyPlantsRepository>();
+      services.AddTransient<IVersionRepository, VersionRepository>();
     }
   }
 }

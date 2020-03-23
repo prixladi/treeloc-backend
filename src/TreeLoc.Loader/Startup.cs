@@ -11,12 +11,18 @@ namespace TreeLoc.Loader
   {
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddHostedService<LoaderService>();
       services.AddDbContext<DbConfig>();
+
+      services.AddHostedService<LoaderService>();
+      services.AddHostedService<DiscoveryService>();
+
+      services.AddSingleton<IResourcesRepository, ResourcesRepository>();
+
       services.AddTransient<IWoodyPlantRepository, WoodyPlantRepository>();
+      services.AddTransient<IVersionRepository, VersionRepository>();
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app)
     {
       app.UseRouting();
     }

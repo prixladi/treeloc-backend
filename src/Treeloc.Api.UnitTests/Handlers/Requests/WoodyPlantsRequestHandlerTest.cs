@@ -18,10 +18,12 @@ namespace Treeloc.Api.UnitTests.Handlers.Requests
   public class WoodyPlantsRequestHandlerTest
   {
     private readonly IWoodyPlantsRepository fWoodyPlantsRepository;
+    private readonly IVersionRepository fVersionRepository;
 
     public WoodyPlantsRequestHandlerTest()
     {
       fWoodyPlantsRepository = Substitute.For<IWoodyPlantsRepository>();
+      fVersionRepository = Substitute.For<IVersionRepository>();
     }
 
     [Fact]
@@ -41,7 +43,7 @@ namespace Treeloc.Api.UnitTests.Handlers.Requests
         .CountByFilterAsync(Arg.Is(filter), Arg.Is(default(CancellationToken)))
         .Returns(56);
 
-      var result = await new WoodyPlantsRequestHandler(fWoodyPlantsRepository).Handle(request, default);
+      var result = await new WoodyPlantsRequestHandler(fWoodyPlantsRepository, fVersionRepository).Handle(request, default);
 
       Assert.NotNull(result);
       Assert.Equal(expectedPlants.Count, result.WoodyPlants.Count);
@@ -60,7 +62,7 @@ namespace Treeloc.Api.UnitTests.Handlers.Requests
         .GetByIdAsync(Arg.Is(id), Arg.Is(default(CancellationToken)))
         .Returns((WoodyPlantDocument?)null);
 
-      await Assert.ThrowsAsync<NotFoundException>(async () => await new WoodyPlantsRequestHandler(fWoodyPlantsRepository).Handle(request, default));
+      await Assert.ThrowsAsync<NotFoundException>(async () => await new WoodyPlantsRequestHandler(fWoodyPlantsRepository, fVersionRepository).Handle(request, default));
     }
 
     [Fact]
@@ -84,7 +86,7 @@ namespace Treeloc.Api.UnitTests.Handlers.Requests
         .GetByIdAsync(Arg.Is(id), Arg.Is(default(CancellationToken)))
         .Returns(expectedPlant);
 
-      var result = await new WoodyPlantsRequestHandler(fWoodyPlantsRepository).Handle(request, default);
+      var result = await new WoodyPlantsRequestHandler(fWoodyPlantsRepository, fVersionRepository).Handle(request, default);
 
       Assert.NotNull(result);
       Assert.Equal(expectedPlant.Id, result.Id);

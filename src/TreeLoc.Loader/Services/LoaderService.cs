@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
@@ -13,32 +11,19 @@ namespace TreeLoc.Loader.Services
 {
   public class LoaderService: IHostedService
   {
-    private static readonly HttpClient fContext = new HttpClient();
-
-    private static readonly HashSet<string> fResources = new HashSet<string>
-    {
-      "Hl.m. Praha",
-      "Jihomoravský",
-      "Jihočeský",
-      "Karlovarský",
-      "Královéhradecký",
-      "Liberecký",
-      "Moravskoslezský",
-      "Olomoucký",
-      "Pardubický",
-      "Plzeňský",
-      "Středočeský",
-      "Vysočina",
-      "Zlínský",
-      "Ústecký"
-    };
-
+    private readonly IResourcesRepository fResourcesRepository;
+    private readonly IVersionRepository fVersionRepository;
     private readonly IWoodyPlantRepository fWoodyPlantRepository;
     private Task? fLoaderTask;
     private CancellationTokenSource? fCancellationTokenSource;
 
-    public LoaderService(IWoodyPlantRepository woodyPlantRepository)
+    public LoaderService(
+      IResourcesRepository resourcesRepository,
+      IVersionRepository versionRepository,
+      IWoodyPlantRepository woodyPlantRepository)
     {
+      fResourcesRepository = resourcesRepository;
+      fVersionRepository = versionRepository;
       fWoodyPlantRepository = woodyPlantRepository;
     }
 
@@ -72,38 +57,42 @@ namespace TreeLoc.Loader.Services
     private async Task LoadAsync(TimeSpan delay, CancellationToken cancellationToken)
     {
       string version = DateTime.UtcNow.GetHashCode().ToString();
-      foreach(var resource in fResources)
+
+      while (true)
       {
-        try
+        var resources = fResourcesRepository.GetFalse();
+        foreach (var resource in resources)
         {
-          var data = await LoadAsync(resource, cancellationToken);
-          var documents = data.ToDocument(version);
+          try
+          {
+            var data = await LoadAsync(resource, cancellationToken);
+            var documents = data.ToDocument(version);
 
-          await fWoodyPlantRepository.InsertManyAsync(documents, cancellationToken);
-          await fWoodyPlantRepository.DelteInvalidAsync(version, cancellationToken);
+            await fWoodyPlantRepository.InsertManyAsync(documents, cancellationToken);
+            await fWoodyPlantRepository.DelteInvalidAsync(version, cancellationToken);
+            await fVersionRepository.UpdateAsync(DateTime.UtcNow.GetHashCode().ToString(), cancellationToken);
+            fResourcesRepository.SetTrue(resource);
 
-          Console.WriteLine($"Successfuly loaded data from resource '{resource}'");
+            Console.WriteLine($"Successfuly loaded data from resource '{resource}'");
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine($"Error loading data from resource '{resource}'");
+            Console.WriteLine(ex);
+          }
+
+          await Task.Delay(delay, cancellationToken);
         }
-        catch(Exception ex)
-        {
-          Console.WriteLine($"Error loading data from resource '{resource}'");
-          Console.WriteLine(ex);
-        }
 
-        await Task.Delay(delay, cancellationToken);
+        if (!resources.Any())
+          await Task.Delay(delay, cancellationToken);
       }
     }
 
-    private async Task<WoodyPlant[]> LoadAsync(string resource, CancellationToken cancellationToken)
+    private async Task<WoodyPlant[]> LoadAsync(Uri resource, CancellationToken _)
     {
-      const string baseAddress = "https://raw.githubusercontent.com/prixladi/treeloc-data/master/";
-
-      var builder = new UriBuilder(baseAddress);
-      builder.Path = Path.Combine(builder.Path, $"{resource}.json");
-
-      var data = await fContext.GetStringAsync(builder.Uri);
-
-     return Newtonsoft.Json.JsonConvert.DeserializeObject<WoodyPlant[]>(data);
+      var data = await HttpClientContext.Client.GetStringAsync(resource);
+      return Newtonsoft.Json.JsonConvert.DeserializeObject<WoodyPlant[]>(data);
     }
   }
 }

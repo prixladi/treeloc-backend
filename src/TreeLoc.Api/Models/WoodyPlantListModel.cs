@@ -6,5 +6,6 @@ namespace TreeLoc.Api.Models
   {
     public List<WoodyPlantPreviewModel> WoodyPlants { get; set; } = default!;
     public long TotalCount { get; set; }
+    public string? DataVersion { get; set; }
   }
 }

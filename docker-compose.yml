@@ -20,6 +20,8 @@ services:
       MONGO_URL: "mongodb://mongodb:27017"
       MONGO_DATABASE_NAME: "TreeLoc"
       LOADER_DELAY: "20"
+      DISCOVERY_DELAY: "20"
+      DISCOVERY_URL: "https://raw.githubusercontent.com/prixladi/treeloc-data/master/Discovery.csv"
     build:
       context: .
       dockerfile: src/TreeLoc.Loader/Dockerfile
