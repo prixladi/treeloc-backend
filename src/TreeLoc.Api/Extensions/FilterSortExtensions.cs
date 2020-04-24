@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MongoDB.Driver;
 using TreeLoc.Api.Models;
 using TreeLoc.Database.Documents;
@@ -16,8 +17,12 @@ namespace TreeLoc.Api.Extensions
 
       if (model.Text != null)
       {
-        var text = model.Text.ToLower();
-        filter &= Builders<WoodyPlantDocument>.Filter.Text(text);
+        var text = BuildAndTextSearch(model.Text);
+        filter &= Builders<WoodyPlantDocument>.Filter.Text(text, new TextSearchOptions
+        {
+          CaseSensitive = false,
+          DiacriticSensitive = false
+        });
       }
 
       if (model.Point != null)
@@ -59,6 +64,13 @@ namespace TreeLoc.Api.Extensions
         options.Sort = sort;
 
       return options;
+    }
+
+    private static string BuildAndTextSearch(string text)
+    {
+      var parts = text.ToLower().Split(" ");
+      var quoted = parts.Select(x => $"\"{x}\"");
+      return string.Join(' ', quoted);
     }
   }
 }
