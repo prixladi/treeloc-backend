@@ -10,6 +10,6 @@
 
 ## Run test with code coverage
 
-`docker-compose.exe -f .\tests\docker-compose.yml up --build`
+`docker-compose -f .\tests\docker-compose.yml up --build`
 
 Code coverage is available at http://localhost after container running tests exits with code 0.
