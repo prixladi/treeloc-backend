@@ -1,6 +1,6 @@
 # Treeloc Backend
 
-Frontend aplikace se nachází zde [Treeloc Backend](https://github.com/prixladi/treeloc-backend).
+Frontend aplikace se nachází zde [Treeloc Frontend](https://github.com/prixladi/treeloc-frontend).
 
 # Spuštění projektu
 
