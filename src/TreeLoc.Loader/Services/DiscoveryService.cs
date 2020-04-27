@@ -22,7 +22,7 @@ namespace TreeLoc.Loader.Services
     {
       fCancellationTokenSource = new CancellationTokenSource();
 
-      var delay = EnvironmentVariables.Get(EnvironmentVariables._DiscoveryDelay);
+      var delay = EnvironmentVariables.Get(EnvironmentVariables._DiscoveryInterval);
       var url = EnvironmentVariables.GetOrThrow(EnvironmentVariables._DiscoveryUrl);
 
       fDiscoveryTask = LoadAsync(url, TimeSpan.FromSeconds(int.Parse(delay ?? "60")), fCancellationTokenSource.Token);

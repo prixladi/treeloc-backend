@@ -37,7 +37,7 @@ namespace TreeLoc.Loader.Services
     {
       fCancellationTokenSource = new CancellationTokenSource();
 
-      var delay = EnvironmentVariables.Get(EnvironmentVariables._LoaderDelay);
+      var delay = EnvironmentVariables.Get(EnvironmentVariables._LoaderInterval);
       await fWoodyPlantRepository.DeleteAsync(cancellationToken);
       fLoaderTask = LoadAsync(TimeSpan.FromSeconds(int.Parse(delay ?? "60")), fCancellationTokenSource.Token);
     }

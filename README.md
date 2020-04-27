@@ -1,15 +1,62 @@
 # Treeloc Backend
 
-## Run
+Frontend aplikace se nachází zde [Treeloc Backend](https://github.com/prixladi/treeloc-backend).
 
-`docker-compose up`
+# Spuštění projektu
 
-## Run with clean build
+## Docker (docker-compose)
 
-`docker-compose up --build`
+Spuštění projektu pomocí `docker-compose up`
 
-## Run test with code coverage
+Vytvoření nových imagů a spuštění projektu pomocí `docker-compose up --build`
 
-`docker-compose -f .\tests\docker-compose.yml up --build`
+---
 
-Code coverage is available at http://localhost after container running tests exits with code 0.
+### Api service
+
+Služba poběží na portu *4545*.
+
+---
+### Loader service
+
+Služba poběží na portu *4546*.
+
+---
+
+### Mongo
+
+Kontejner s databází se spustí na portu *27017*.
+
+---
+
+Mapování portů pro všechny služby se dá změnit v souboru **/docker-compose.yml**.
+
+[Dokumentace docker-compose.](https://docs.docker.com/compose/)
+
+---
+
+## Yarn
+
+Inicializace projektu  `yarn`
+
+Spuštění projektu `yarn start`
+
+# Proměnné prostředí
+Proměnné prostředí se dají změnit v souboru **/docker-compose.yml**.
+
+## Api service
+
+|Název|Povinná|Popis|
+|---|---|---|
+|MONGO_URL|ano|Adresa Mongo databáze|
+|MONGO_DATABASE_NAME|ano|Název Mongo databáze|
+
+## Loader service
+
+|Název|Povinná|Popis|
+|---|---|---|
+|MONGO_URL|ano|Adresa Mongo databáze|
+|MONGO_DATABASE_NAME|ano|Název Mongo databáze|
+|LOADER_INTERVAL|ano|Interval stahovaní datasetů ve vteřinách|
+|DISCOVERY_INTERVAL|ano|Interval volání DISCOVERY_URL ve vteřinách|
+|DISCOVERY_URL|ano|Adresa která vrací adresy datasetů|
