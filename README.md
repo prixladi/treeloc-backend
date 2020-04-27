@@ -12,46 +12,48 @@ Vytvoření nových imagů a spuštění projektu pomocí `docker-compose up --b
 
 ---
 
-### Api service
+### Api 
 
-Služba poběží na portu *4545*.
-
----
-### Loader service
-
-Služba poběží na portu *4546*.
+Služba poběží na portu **4545**.
 
 ---
+### Loader 
 
-### Mongo
-
-Kontejner s databází se spustí na portu *27017*.
+Služba poběží na portu **4546**.
 
 ---
 
-Mapování portů pro všechny služby se dá změnit v souboru **/docker-compose.yml**.
+### MongoDb
+
+Kontejner s databází se spustí na portu **27017**.
+
+---
+
+Mapování portů pro všechny služby se dá změnit v souboru **./docker-compose.yml**.
 
 [Dokumentace docker-compose.](https://docs.docker.com/compose/)
 
----
+# Spuštění testů a zobrazení pokrytí kódu 
 
-## Yarn
+## Docker (docker-compose)
 
-Inicializace projektu  `yarn`
+Pomocí `docker-compose -f ./tests/docker-compose.yml up --build`
 
-Spuštění projektu `yarn start`
+UI s pokrytím kódu běží po doběhnutí testů na portu **80**.
+
+Mapování portů pro všechny služby se dá změnit v souboru **./tests/docker-compose.yml**.
 
 # Proměnné prostředí
-Proměnné prostředí se dají změnit v souboru **/docker-compose.yml**.
+Proměnné prostředí se dají změnit v souboru **./docker-compose.yml**.
 
-## Api service
+## Api
 
 |Název|Povinná|Popis|
 |---|---|---|
 |MONGO_URL|ano|Adresa Mongo databáze|
 |MONGO_DATABASE_NAME|ano|Název Mongo databáze|
 
-## Loader service
+## Loader
 
 |Název|Povinná|Popis|
 |---|---|---|
