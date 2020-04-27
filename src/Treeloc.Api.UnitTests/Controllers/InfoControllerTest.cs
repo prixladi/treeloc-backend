@@ -29,8 +29,7 @@ namespace Treeloc.Api.UnitTests.Controllers
         .Returns(new InfoModel { Version = "ver" });
 
       var result = await controller.GetAsync(default);
-      var objResult = Assert.IsType<OkObjectResult>(result);
-      var model = Assert.IsType<InfoModel>(objResult.Value);
+      var model = Assert.IsType<InfoModel>(result);
       Assert.Equal("ver", model.Version);
     }
   }

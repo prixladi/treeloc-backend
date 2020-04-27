@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
@@ -12,6 +13,7 @@ using TreeLoc.Repositories;
 
 namespace TreeLoc.Api.Repositories
 {
+  [ExcludeFromCodeCoverage]
   public class WoodyPlantsRepository: RepositoryBase<WoodyPlantDocument>, IWoodyPlantsRepository
   {
     public WoodyPlantsRepository(DbContext dbContext)

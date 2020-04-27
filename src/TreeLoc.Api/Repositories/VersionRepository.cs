@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver;
 using TreeLoc.Database;
@@ -7,6 +8,7 @@ using TreeLoc.Repositories;
 
 namespace TreeLoc.Api.Repositories
 {
+  [ExcludeFromCodeCoverage]
   public class VersionRepository: RepositoryBase<VersionDocument, DbConfigDocument>, IVersionRepository
   {
     public VersionRepository(DbContext dbContext)

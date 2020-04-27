@@ -13,7 +13,7 @@ namespace Treeloc.Api.UnitTests.IoC
       collection.AddHostedServices();
       collection.AddRepositories();
 
-      Assert.Equal(2, collection.Count);
+      Assert.Equal(3, collection.Count);
     }
   }
 }
