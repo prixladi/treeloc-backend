@@ -10,9 +10,6 @@ namespace TreeLoc.Extension
   {
     public static WoodyPlantDocument ToDocument(this WoodyPlant plant, string? version = null)
     {
-      if (plant is null)
-        throw new ArgumentNullException(nameof(plant));
-
       return new WoodyPlantDocument
       {
         ImageUrls = plant.ImageUrls,
@@ -27,9 +24,6 @@ namespace TreeLoc.Extension
 
     public static WoodyPlantDocument[] ToDocument(this IEnumerable<WoodyPlant> plants, string? version = null)
     {
-      if (plants is null)
-        throw new ArgumentNullException(nameof(plants));
-
       return plants
         .Select(x => x.ToDocument(version))
         .ToArray();

@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace TreeLoc.Loader
 {
+  [ExcludeFromCodeCoverage]
   public sealed class Program
   {
     public static void Main(string[] args)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -17,6 +18,7 @@ namespace TreeLoc.Database.Documents
     public ObjectId[] InnerWoodyPlantIds { get; set; } = Array.Empty<ObjectId>();
     public string? Version { get; set; }
 
+    [ExcludeFromCodeCoverage]
     [BsonIgnoreIfNull]
     public double? TextMatchScore { get; set; }
   }

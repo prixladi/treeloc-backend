@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using MongoDB.Driver;
 using TreeLoc.Api.Models;
@@ -6,6 +7,7 @@ using TreeLoc.Database.Documents;
 
 namespace TreeLoc.Api.Extensions
 {
+  [ExcludeFromCodeCoverage]
   public static class FilterSortExtensions
   {
     public static FilterDefinition<WoodyPlantDocument> ToFilterDefinition(this WoodyPlantFilterModel model)

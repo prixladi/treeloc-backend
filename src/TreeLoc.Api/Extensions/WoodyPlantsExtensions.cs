@@ -10,9 +10,6 @@ namespace TreeLoc.Api.Extensions
   {
     public static WoodyPlantDetailModel ToDetail(this WoodyPlantDocument doc)
     {
-      if (doc is null)
-        throw new ArgumentNullException(nameof(doc));
-
       return new WoodyPlantDetailModel
       {
         Id = doc.Id,

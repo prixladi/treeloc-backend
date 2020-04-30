@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using TreeLoc.Loader.Configs;
 using TreeLoc.Loader.Repositories;
@@ -8,6 +8,7 @@ using TreeLoc.Loader.SignalR;
 
 namespace TreeLoc.Loader
 {
+  [ExcludeFromCodeCoverage]
   public sealed class Startup
   {
     public void ConfigureServices(IServiceCollection services)
@@ -19,9 +20,12 @@ namespace TreeLoc.Loader
       services.AddHostedService<DiscoveryService>();
 
       services.AddSingleton<IResourcesRepository, ResourcesRepository>();
+      services.AddSingleton<IDiscoveryServiceConfig, DiscoveryServiceConfig>();
+      services.AddSingleton<ILoaderServiceConfig, LoaderServiceConfig>();
 
       services.AddTransient<IWoodyPlantRepository, WoodyPlantRepository>();
       services.AddTransient<IVersionRepository, VersionRepository>();
+      services.AddTransient<IHttpService, HttpService>();
     }
 
     public void Configure(IApplicationBuilder app)

@@ -33,9 +33,7 @@ namespace TreeLoc.Api.Handlers.Requests
 
     public async Task<WoodyPlantListModel> Handle(GetWoodyPlantsByFilterRequest request, CancellationToken cancellationToken)
     {
-      var plants = await fWoodyPlantsRepository.GetByFilterAsync(request.Filter, request.Sort, cancellationToken);
       var versionDoc = await fVersionRepository.GetSingleAsync(cancellationToken);
-
       if (await IsFillCoordsFilterAsync(request.Filter, request.Sort, cancellationToken))
       {
         var all = await fWoodyPlantsRepository.GetWithCoordsAsync(cancellationToken);
@@ -47,6 +45,7 @@ namespace TreeLoc.Api.Handlers.Requests
         };
       }
 
+      var plants = await fWoodyPlantsRepository.GetByFilterAsync(request.Filter, request.Sort, cancellationToken);
       return new WoodyPlantListModel
       {
         TotalCount = await fWoodyPlantsRepository.CountByFilterAsync(request.Filter, cancellationToken),

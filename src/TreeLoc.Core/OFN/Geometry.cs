@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-
-namespace TreeLoc.OFN
+﻿namespace TreeLoc.OFN
 {
   public class Geometry
   {

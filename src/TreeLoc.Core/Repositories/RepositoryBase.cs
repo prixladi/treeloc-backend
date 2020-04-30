@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -8,7 +9,8 @@ using TreeLoc.Database.Documents;
 
 namespace TreeLoc.Repositories
 {
-  public class RepositoryBase<TDocument, TDocumentBase>: IRepositoryBase<TDocument>
+  [ExcludeFromCodeCoverage]
+  public abstract class RepositoryBase<TDocument, TDocumentBase>: IRepositoryBase<TDocument>
     where TDocumentBase : DocumentBase
     where TDocument: TDocumentBase
   {
@@ -17,7 +19,7 @@ namespace TreeLoc.Repositories
     protected IMongoCollection<TDocument> Collection => fDbContext.Database.GetCollection<TDocumentBase>().OfType<TDocument>();
     protected IMongoQueryable<TDocument> Query => Collection.AsQueryable();
 
-    public RepositoryBase(DbContext dbContext)
+    protected RepositoryBase(DbContext dbContext)
     {
       fDbContext = dbContext;
     }
@@ -33,7 +35,8 @@ namespace TreeLoc.Repositories
     }
   }
 
-  public class RepositoryBase<TDocument>: IRepositoryBase<TDocument>
+  [ExcludeFromCodeCoverage]
+  public abstract class RepositoryBase<TDocument>: IRepositoryBase<TDocument>
     where TDocument : DocumentBase
   {
     private readonly DbContext fDbContext;
@@ -41,7 +44,7 @@ namespace TreeLoc.Repositories
     protected IMongoCollection<TDocument> Collection => fDbContext.Database.GetCollection<TDocument>();
     protected IMongoQueryable<TDocument> Query => Collection.AsQueryable();
 
-    public RepositoryBase(DbContext dbContext)
+    protected RepositoryBase(DbContext dbContext)
     {
       fDbContext = dbContext;
     }

@@ -1,32 +1,36 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using TreeLoc.Loader.Configs;
 using TreeLoc.Loader.Repositories;
 
 namespace TreeLoc.Loader.Services
 {
   public class DiscoveryService: IHostedService
   {
+    private readonly IHttpService fHttpService;
     private readonly IResourcesRepository fResourcesRepository;
+    private readonly IDiscoveryServiceConfig fConfig;
+
     private Task? fDiscoveryTask;
     private CancellationTokenSource? fCancellationTokenSource;
 
-    public DiscoveryService(IResourcesRepository resourcesRepository)
+    public DiscoveryService(
+      IHttpService httpService,
+      IResourcesRepository resourcesRepository, 
+      IDiscoveryServiceConfig config)
     {
+      fHttpService = httpService;
       fResourcesRepository = resourcesRepository;
+      fConfig = config;
     }
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
       fCancellationTokenSource = new CancellationTokenSource();
-
-      var delay = EnvironmentVariables.Get(EnvironmentVariables._DiscoveryInterval);
-      var url = EnvironmentVariables.GetOrThrow(EnvironmentVariables._DiscoveryUrl);
-
-      fDiscoveryTask = LoadAsync(url, TimeSpan.FromSeconds(int.Parse(delay ?? "60")), fCancellationTokenSource.Token);
-
+      var url = new Uri(fConfig.Url);
+      fDiscoveryTask = LoadAsync(url, fConfig.Interval, fCancellationTokenSource.Token);
       return Task.CompletedTask;
     }
 
@@ -46,13 +50,13 @@ namespace TreeLoc.Loader.Services
       }
     }
 
-    private async Task LoadAsync(string discoveryUrl, TimeSpan delay, CancellationToken cancellationToken)
+    private async Task LoadAsync(Uri discoveryUrl, TimeSpan delay, CancellationToken cancellationToken)
     {
-      while (true)
+      while (!cancellationToken.IsCancellationRequested)
       {
         try
         {
-          var endpoints = await DiscoveryAsync(discoveryUrl, cancellationToken);
+          var endpoints = await fHttpService.DiscoveryAsync(discoveryUrl, cancellationToken);
 
           Console.WriteLine($"Discovered '${discoveryUrl}', found endpoints: '{string.Join(',', endpoints)}'");
 
@@ -67,15 +71,6 @@ namespace TreeLoc.Loader.Services
 
         await Task.Delay(delay, cancellationToken);
       }
-    }
-
-    private async Task<string[]> DiscoveryAsync(string url, CancellationToken _)
-    {
-      var data = await HttpClientContext.Client.GetStringAsync(url);
-
-      return data.Split(Environment.NewLine)
-        .Where(s => !string.IsNullOrEmpty(s))
-        .ToArray();
     }
   }
 }

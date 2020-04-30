@@ -1,5 +1,4 @@
-﻿using System;
-using TreeLoc.Api.Models;
+﻿using TreeLoc.Api.Models;
 using TreeLoc.Database.Documents;
 
 namespace TreeLoc.Api.Extensions
