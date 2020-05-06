@@ -11,6 +11,7 @@ namespace TreeLoc.Loader
     public const string _LoaderInterval = "LOADER_INTERVAL";
     public const string _DiscoveryInterval = "DISCOVERY_INTERVAL";
     public const string _DiscoveryUrl = "DISCOVERY_URL";
+    public const string _RemoveOld = "REMOVE_OLD";
 
     public static string GetOrThrow(string name)
     {

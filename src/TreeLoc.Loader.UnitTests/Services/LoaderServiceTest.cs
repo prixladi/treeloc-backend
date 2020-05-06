@@ -48,8 +48,8 @@ namespace TreeLoc.Loader.UnitTests.Services
         .Returns(TimeSpan.FromSeconds(7));
 
       fResourcesRepository
-        .GetFalse()
-        .Returns(new Uri[] { new Uri("http://dot.com/") });
+        .GetFalseAsync(Arg.Any<CancellationToken>())
+        .Returns(new List<string> { "http://dot.com/" });
 
       fHttpService
         .LoadAsync(Arg.Is<Uri>(x => x.AbsoluteUri == "http://dot.com/"), Arg.Any<CancellationToken>())
@@ -58,9 +58,9 @@ namespace TreeLoc.Loader.UnitTests.Services
       await fService.StartAsync(default);
       await Task.Delay(600);
 
-      fResourcesRepository
+      await fResourcesRepository
         .Received()
-        .SetTrue(Arg.Is<Uri>(x => x.AbsoluteUri == "http://dot.com/"));
+        .SetTrueAsync(Arg.Is("http://dot.com/"), Arg.Any<CancellationToken>());
 
       await fService.StopAsync(default);
       await fService.StopAsync(default);
@@ -73,9 +73,13 @@ namespace TreeLoc.Loader.UnitTests.Services
         .Interval
         .Returns(TimeSpan.FromSeconds(7));
 
+      fConfig
+        .RemoveOld
+        .Returns(false);
+
       fResourcesRepository
-        .GetFalse()
-        .Returns(new Uri[] { new Uri("http://dot.com/") });
+        .GetFalseAsync(Arg.Any<CancellationToken>())
+        .Returns(new List<string> { "http://dot.com/" });
 
       fHttpService
         .LoadAsync(Arg.Is<Uri>(x => x.AbsoluteUri == "http://dot.com/"), Arg.Any<CancellationToken>())

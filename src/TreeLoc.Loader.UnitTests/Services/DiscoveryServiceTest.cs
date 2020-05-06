@@ -44,9 +44,9 @@ namespace TreeLoc.Loader.UnitTests.Services
       await fService.StartAsync(default);
       await Task.Delay(600);
 
-      fResourcesRepository
+      await fResourcesRepository
         .Received()
-        .Add(Arg.Is<Uri>(x => x.AbsoluteUri == "https://dot.eu/"));
+        .AddAsync(Arg.Is("https://dot.eu/"), Arg.Any<CancellationToken>());
 
       await fService.StopAsync(default);
       await fService.StopAsync(default);
@@ -68,7 +68,7 @@ namespace TreeLoc.Loader.UnitTests.Services
         .Returns(new string[] { "https://dot.eu/" });
 
       fResourcesRepository
-        .When(x => x.Add(Arg.Is<Uri>(x => x.AbsoluteUri == "https://dot.eu/")))
+        .When(x => x.AddAsync(Arg.Is("https://dot.eu/"), Arg.Any<CancellationToken>()))
         .Throw<Exception>();
 
       await fService.StartAsync(default);

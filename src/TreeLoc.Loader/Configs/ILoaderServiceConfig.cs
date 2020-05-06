@@ -5,5 +5,6 @@ namespace TreeLoc.Loader.Configs
   public interface ILoaderServiceConfig
   {
     public TimeSpan Interval { get; }
+    bool RemoveOld { get; }
   }
 }

@@ -61,7 +61,8 @@ namespace TreeLoc.Loader.Services
           Console.WriteLine($"Discovered '${discoveryUrl}', found endpoints: '{string.Join(',', endpoints)}'");
 
           foreach (var endpoint in endpoints)
-            fResourcesRepository.Add(new Uri(endpoint));
+            await fResourcesRepository.AddAsync(new Uri(endpoint).AbsoluteUri, cancellationToken);
+          
         }
         catch (Exception ex)
         {

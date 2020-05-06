@@ -62,3 +62,4 @@ Proměnné prostředí se dají změnit v souboru **./docker-compose.yml**.
 |LOADER_INTERVAL|ano|Interval stahovaní datasetů ve vteřinách|
 |DISCOVERY_INTERVAL|ano|Interval volání DISCOVERY_URL ve vteřinách|
 |DISCOVERY_URL|ano|Adresa která vrací adresy datasetů|
+|REMOVE_OLD|ano|Příznak true/false zda se po spuštění mají smazat všechna data|

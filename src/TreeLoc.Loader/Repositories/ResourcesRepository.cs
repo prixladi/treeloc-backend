@@ -1,34 +1,52 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading;
+using System.Threading.Tasks;
+using MongoDB.Driver;
+using MongoDB.Driver.Linq;
+using TreeLoc.Database;
+using TreeLoc.Database.Documents;
+using TreeLoc.Repositories;
 
 namespace TreeLoc.Loader.Repositories
 {
-  public class ResourcesRepository: IResourcesRepository
+  [ExcludeFromCodeCoverage]
+  public class ResourcesRepository: RepositoryBase<ResourceDocument>, IResourcesRepository
   {
-    private readonly ConcurrentDictionary<Uri, bool> fResources;
+    public ResourcesRepository(DbContext dbContext)
+      : base(dbContext) { }
 
-    public ResourcesRepository()
+    public async Task AddAsync(string url, CancellationToken cancellationToken)
     {
-      fResources = new ConcurrentDictionary<Uri, bool>();
+      var update = Builders<ResourceDocument>.Update
+        .SetOnInsert(doc => doc.Fetched, false)
+        .SetOnInsert(doc => doc.Url, url);
+
+      await Collection.UpdateOneAsync(x => x.Url == url, update,
+        new UpdateOptions { IsUpsert = true }, cancellationToken);
     }
 
-    public void Add(Uri url)
+    public async Task SetTrueAsync(string url, CancellationToken cancellationToken)
     {
-      fResources.TryAdd(url, false);
+      var update = Builders<ResourceDocument>.Update
+        .Set(doc => doc.Fetched, true)
+        .SetOnInsert(doc => doc.Url, url);
+
+      await Collection.UpdateOneAsync(x => x.Url == url, update,
+        new UpdateOptions { IsUpsert = true }, cancellationToken);
     }
 
-    public void SetTrue(Uri url)
+    public async Task<List<string>> GetFalseAsync(CancellationToken cancellationToken)
     {
-      fResources.TryUpdate(url, true, false);
+      return await Query
+        .Where(doc => doc.Fetched == false)
+        .Select(x => x.Url)
+        .ToListAsync(cancellationToken);
     }
 
-    public Uri[] GetFalse()
+    public async Task ClearAsync(CancellationToken cancellationToken)
     {
-      return fResources
-        .Where(res => !res.Value)
-        .Select(res => res.Key)
-        .ToArray();
+      await Collection.DeleteManyAsync(Builders<ResourceDocument>.Filter.Empty, cancellationToken);
     }
   }
 }
