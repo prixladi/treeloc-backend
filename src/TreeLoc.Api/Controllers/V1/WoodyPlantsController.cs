@@ -21,12 +21,12 @@ namespace TreeLoc.Api.Controllers.V1
     }
 
     /// <summary>
-    /// Returns woody plants preview
+    /// Vrátí náhledy dřevin
     /// </summary>
     /// <param name="filter"></param>
     /// <param name="sort"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>Seznam modelů náhledů dřevin</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WoodyPlantListModel))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -36,11 +36,11 @@ namespace TreeLoc.Api.Controllers.V1
     }
 
     /// <summary>
-    /// Returns detail about woody plant
+    /// Vrátí detail dřeviny
     /// </summary>
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>Model detailu dřeviny</returns>
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(WoodyPlantDetailModel))]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

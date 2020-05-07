@@ -19,9 +19,9 @@ namespace TreeLoc.Api.Controllers
     }
 
     /// <summary>
-    /// Returns basic info about api
+    /// Vrátí základní informace aplikačního rozhraní
     /// </summary>
-    /// <returns>Model with info</returns>
+    /// <returns>Model s informacemi</returns>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(InfoModel))]
     public async Task<InfoModel> GetAsync(CancellationToken cancellationToken)
