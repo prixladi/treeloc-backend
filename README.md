@@ -1,65 +1,65 @@
 # Treeloc Backend
 
-Frontend aplikace se nachází zde [Treeloc Frontend](https://github.com/prixladi/treeloc-frontend).
+[Project repository](https://github.com/prixladi/treeloc/).
 
-# Spuštění projektu
+# Launching the project
 
 ## Docker (docker-compose)
 
-Spuštění projektu pomocí `docker-compose up`
+Start the project using `docker-compose up`
 
-Vytvoření nových imagů a spuštění projektu pomocí `docker-compose up --build`
-
----
-
-### Api 
-
-Služba poběží na portu **4545**.
+Create new images and start the project using `docker-compose up --build`
 
 ---
-### Loader 
 
-Služba poběží na portu **4546**.
+### Api
+
+Api service should be running on port **4545**.
+
+---
+### Loader
+
+Loader service should be running on port **4546**.
 
 ---
 
 ### MongoDb
 
-Kontejner s databází se spustí na portu **27017**.
+MongoDb container should be running on port **27017**.
 
 ---
 
-Mapování portů pro všechny služby se dá změnit v souboru **./docker-compose.yml**.
+Port mapping for all services can be changed in the **./docker-compose.yml** file.
 
-[Dokumentace docker-compose.](https://docs.docker.com/compose/)
+[docker-compose documentation.](https://docs.docker.com/compose/)
 
-# Spuštění testů a zobrazení pokrytí kódu 
+# Run tests and code coverage
 
 ## Docker (docker-compose)
 
-Pomocí `docker-compose -f ./tests/docker-compose.yml up --build`
+Using `docker-compose -f ./tests/docker-compose.yml up --build`
 
-UI s pokrytím kódu běží po doběhnutí testů na portu **80**.
+UI with code coverage should be be accessible on port **80**.
 
-Mapování portů pro všechny služby se dá změnit v souboru **./tests/docker-compose.yml**.
+Port mapping for all services can be changed in the **./tests/docker-compose.yml** file.
 
-# Proměnné prostředí
-Proměnné prostředí se dají změnit v souboru **./docker-compose.yml**.
+# Environment variables
+Environment variables can be changed in the **./docker-compose.yml** file.
 
-## Api
+## Api service
 
-|Název|Povinná|Popis|
+|Name|Optional|Description|
 |---|---|---|
-|MONGO_URL|ano|Adresa Mongo databáze|
-|MONGO_DATABASE_NAME|ano|Název Mongo databáze|
+|MONGO_URL|no|MongoDB address|
+|MONGO_DATABASE_NAME|no|MongoDB Database name|
 
-## Loader
+## Loader service
 
-|Název|Povinná|Popis|
+|Name|Optional|Description|
 |---|---|---|
-|MONGO_URL|ano|Adresa Mongo databáze|
-|MONGO_DATABASE_NAME|ano|Název Mongo databáze|
-|LOADER_INTERVAL|ano|Interval stahovaní datasetů ve vteřinách|
-|DISCOVERY_INTERVAL|ano|Interval volání DISCOVERY_URL ve vteřinách|
-|DISCOVERY_URL|ano|Adresa která vrací adresy datasetů|
-|REMOVE_OLD|ano|Příznak true/false zda se po spuštění mají smazat všechna data|
+|MONGO_URL|no|MongoDB address|
+|MONGO_DATABASE_NAME|no|MongoDB Database name|
+|LOADER_INTERVAL|no|Dataset download interval \[s\]|
+|DISCOVERY_INTERVAL|no|DISCOVERY_URL call interval \[s\]|
+|DISCOVERY_URL|no|Address of discovery endpoint|
+|REMOVE_OLD|no|Flag true/false whether to clear all data after start|
